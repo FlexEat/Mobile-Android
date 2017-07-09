@@ -30,16 +30,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AccessToken accessToken = getIntent().getParcelableExtra("loginToken");
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         GraphRequest request = GraphRequest.newMeRequest(accessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
                             String userID = (String) object.get("id");
+                            String fullName = (String) object.get("name");
                             URL profilePicUrl = new URL("https://graph.facebook.com/" + userID+ "/picture?type=large");
                             Picasso.with(getApplicationContext()).load(profilePicUrl.toString()).fit().into((ImageView) findViewById(R.id.profilePic));
-                            //Bitmap b = (Bitmap) object.get("picture");
+                            TextView userFullName = (TextView) findViewById(R.id.userFullName);
+                            userFullName.setText(fullName);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

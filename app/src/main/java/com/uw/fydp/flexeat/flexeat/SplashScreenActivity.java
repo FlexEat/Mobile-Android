@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.facebook.AccessToken;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
@@ -28,7 +30,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private Boolean isAuthenticated(){
-        Boolean isAuthenticated = Boolean.FALSE;
-        return isAuthenticated;
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
     }
 }

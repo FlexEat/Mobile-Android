@@ -33,7 +33,6 @@ public class FbLoginActivity extends AppCompatActivity {
                 Log.d("test", "successful login");
                 Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
                 Intent goToMainActivity = new Intent(FbLoginActivity.this, MainActivity.class);
-                goToMainActivity.putExtra("loginToken", loginResult.getAccessToken());
                 startActivity(goToMainActivity);
                 finish();
             }
@@ -50,9 +49,6 @@ public class FbLoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error Login", Toast.LENGTH_LONG).show();
             }
         });
-
-
-
     }
 
     @Override

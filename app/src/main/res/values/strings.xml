@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FlexEat</string>
+    <string name="facebook_app_id">971761442965915</string>
+    <string name="fb_login_protocol_scheme">fb971761442965915</string>
 </resources>

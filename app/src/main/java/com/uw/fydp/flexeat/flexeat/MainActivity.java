@@ -1,10 +1,10 @@
 package com.uw.fydp.flexeat.flexeat;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,16 +13,10 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.uw.fydp.flexeat.flexeat.R.id.profilePic;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,16 +37,22 @@ public class MainActivity extends AppCompatActivity {
                             TextView userFullName = (TextView) findViewById(R.id.userFullName);
                             userFullName.setText(fullName);
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (MalformedURLException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-
                     }});
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,email,picture");
         request.setParameters(parameters);
         request.executeAsync();
+
+        Button checkInButton = (Button) findViewById(R.id.check_in_button);
+        checkInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CheckInActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

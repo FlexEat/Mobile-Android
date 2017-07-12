@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -55,6 +56,7 @@ public class CheckInActivity extends AppCompatActivity {
                             String type = "restaurant";
                             String key = getResources().getString(R.string.google_api_key);
 
+                            Log.d("Location", location.toString());
                             URL url = null;
                             try {
                                 url = new URL("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="

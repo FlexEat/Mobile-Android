@@ -17,7 +17,8 @@
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA5aOe9vgDYnMTZqwxNrrqLH0J5OtstKdk"/>
+            android:value="AIzaSyA5aOe9vgDYnMTZqwxNrrqLH0J5OtstKdk" />
+
         <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/SplashTheme">
@@ -29,7 +30,8 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".FbLoginActivity" />
-        <activity android:name=".CheckInActivity"></activity>
+        <activity android:name=".CheckInActivity" />
+        <activity android:name=".MenuActivity" android:theme="@style/SplashTheme"/>
     </application>
 
 </manifest>

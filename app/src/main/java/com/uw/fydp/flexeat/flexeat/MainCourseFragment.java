@@ -11,11 +11,14 @@ import android.widget.ListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 public class MainCourseFragment extends Fragment {
 
     ListView mainCourseListView;
-    ArrayAdapter<String> adapter;
-    JSONArray listOfMainCourse;
+    JSONArray mainCourseJSONArray;
+    ArrayList<MenuItem> arrayListOfMainCourse = new ArrayList<>();
+    MenuItemArrayAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,23 +28,22 @@ public class MainCourseFragment extends Fragment {
 
         String allMainCourseAsString = getArguments().getString("mainCoursesAsString");
         try {
-            listOfMainCourse = new JSONArray(allMainCourseAsString);
+            mainCourseJSONArray = new JSONArray(allMainCourseAsString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        String[] mainCourseList = new String[listOfMainCourse.length()];
-        for(int i = 0, count = listOfMainCourse.length(); i< count; i++)
+        for(int i = 0, count = mainCourseJSONArray.length(); i< count; i++)
         {
             try {
-                mainCourseList[i] = listOfMainCourse.getString(i);
+                arrayListOfMainCourse.add(new MenuItem(mainCourseJSONArray.getJSONObject(i)));
             }
             catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        adapter = new ArrayAdapter<>(getContext(), R.layout.item_menu, R.id.item_name, mainCourseList);
+        adapter = new MenuItemArrayAdapter(getContext(), R.layout.item_menu, arrayListOfMainCourse);
 
         mainCourseListView = (ListView) rootView.findViewById(R.id.main_course_list);
         mainCourseListView.setAdapter(adapter);

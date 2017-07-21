@@ -5,17 +5,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 public class AppetizerFragment extends Fragment {
 
     ListView appetizerListView;
-    ArrayAdapter<String> adapter;
-    JSONArray listOfAppetizer;
+    JSONArray appetizerJSONArray;
+    ArrayList<MenuItem> arrayListOfAppetizers = new ArrayList<>();
+    MenuItemArrayAdapter adapter;
 
     public AppetizerFragment(){
 
@@ -28,23 +30,22 @@ public class AppetizerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_appetizer, container, false);
         String allAppetizersAsString = getArguments().getString("appetizersAsString");
         try {
-            listOfAppetizer = new JSONArray(allAppetizersAsString);
+            appetizerJSONArray = new JSONArray(allAppetizersAsString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        String[] appetizerList = new String[listOfAppetizer.length()];
-        for(int i = 0, count = listOfAppetizer.length(); i< count; i++)
+        for(int i = 0, count = appetizerJSONArray.length(); i< count; i++)
         {
             try {
-                appetizerList[i] = listOfAppetizer.getString(i);
+                arrayListOfAppetizers.add(new MenuItem(appetizerJSONArray.getJSONObject(i)));
             }
             catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        adapter = new ArrayAdapter<>(getContext(), R.layout.item_menu, R.id.item_name, appetizerList);
+        adapter = new MenuItemArrayAdapter(getContext(), R.layout.item_menu, arrayListOfAppetizers);
 
         appetizerListView = (ListView) rootView.findViewById(R.id.appetizer_list);
         appetizerListView.setAdapter(adapter);

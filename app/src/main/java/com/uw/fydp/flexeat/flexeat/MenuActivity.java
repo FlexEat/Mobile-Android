@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.facebook.login.widget.LoginButton;
 
@@ -18,9 +19,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class MenuActivity extends AppCompatActivity implements MenuItemInterface{
 
@@ -95,6 +107,12 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     public void onSubmitOrderClick(View view) {
         selectedItems.clear();
         getSelectedItems();
+        JSONArray selectedItemsJSONArray = new JSONArray();
+        for (int i = 0; i<selectedItems.size(); i++){
+            selectedItemsJSONArray.put(selectedItems.get(i).getJSONObject());
+        }
+        Request request = new Request(selectedItemsJSONArray);
+        request.execute();
     }
 
     @Override

@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.uw.fydp.flexeat.flexeat.AppetizerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginBottom="60dp"
+        android:id="@+id/appetizer_list" />
 
 </FrameLayout>

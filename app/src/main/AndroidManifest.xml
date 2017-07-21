@@ -30,8 +30,9 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".FbLoginActivity" />
-        <activity android:name=".CheckInActivity" />
-        <activity android:name=".MenuActivity" android:theme="@style/SplashTheme"/>
+        <activity android:name=".CheckInActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".MenuActivity" android:theme="@style/NoActionBar"/>
     </application>
 
 </manifest>

@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 mSocket.emit("message", message);
 
                 Intent intent = new Intent(MainActivity.this, CheckInActivity.class);
-//                startActivity(intent);
+                startActivity(intent);
             }
         });
     }

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
@@ -34,20 +35,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
         try {
-            switch(position) {
-                case 0:
-                    AppetizerFragment tab1 = new AppetizerFragment();
-                    bundle.putString("appetizersAsString", menuResponse.getJSONArray("appetizers").toString());
-                    tab1.setArguments(bundle);
-                    return tab1;
-                case 1:
-                    MainCourseFragment tab2 = new MainCourseFragment();
-                    bundle.putString("mainCoursesAsString", menuResponse.getJSONArray("main course").toString());
-                    tab2.setArguments(bundle);
-                    return tab2;
-                default:
-                    return null;
-            }
+
+            GenericFragment tab = new GenericFragment();
+            bundle.putString("itemsAsString", menuResponse.getJSONArray(menuResponse.names().getString(position)).toString());
+            tab.setArguments(bundle);
+            return tab;
         }catch (JSONException e){
             e.printStackTrace();
         }

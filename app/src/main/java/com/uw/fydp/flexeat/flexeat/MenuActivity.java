@@ -1,38 +1,17 @@
 package com.uw.fydp.flexeat.flexeat;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.Buffer;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 
 public class MenuActivity extends AppCompatActivity implements MenuItemInterface{
 
@@ -136,7 +115,7 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     @Override
     public void getSelectedItems() {
         for(int i = 0; i<adapter.getCount(); i++){
-            GenericFragment currentFragment = (GenericFragment) adapter.getFragment(i);
+            GenericMenuFragment currentFragment = (GenericMenuFragment) adapter.getFragment(i);
             //TODO: Fix this when server is back
             try{
                 for(int j = 0; j < currentFragment.adapter.getCount(); j++){

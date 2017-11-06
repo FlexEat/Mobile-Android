@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
@@ -36,7 +35,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         Bundle bundle = new Bundle();
         try {
 
-            GenericFragment tab = new GenericFragment();
+            GenericMenuFragment tab = new GenericMenuFragment();
             bundle.putString("itemsAsString", menuResponse.getJSONArray(menuResponse.names().getString(position)).toString());
             tab.setArguments(bundle);
             return tab;

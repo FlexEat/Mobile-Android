@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.uw.fydp.flexeat.flexeat.GenericFragment">
+    tools:context="com.uw.fydp.flexeat.flexeat.GenericMenuFragment">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
-        android:id="@+id/generic_list" />
+        android:id="@+id/generic_menu_list" />
 
 </FrameLayout>

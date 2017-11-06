@@ -2,7 +2,6 @@ package com.uw.fydp.flexeat.flexeat;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 /**
  * Created by chaitanyakhanna on 2017-10-23.
  */
 
-public class GenericFragment extends Fragment {
+public class GenericMenuFragment extends Fragment {
 
     ListView listView;
     JSONArray itemsJSONArray;
@@ -29,7 +27,7 @@ public class GenericFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_generic, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_generic_menu, container, false);
         String allItemsAsString = getArguments().getString("itemsAsString");
         try {
             itemsJSONArray = new JSONArray(allItemsAsString);
@@ -49,7 +47,7 @@ public class GenericFragment extends Fragment {
 
         adapter = new MenuItemArrayAdapter(getContext(), R.layout.item_menu, arrayListOfItems);
 
-        listView = (ListView) rootView.findViewById(R.id.generic_list);
+        listView = (ListView) rootView.findViewById(R.id.generic_menu_list);
         listView.setAdapter(adapter);
 
         return rootView;

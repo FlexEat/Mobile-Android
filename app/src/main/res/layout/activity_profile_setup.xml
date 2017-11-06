@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.uw.fydp.flexeat.flexeat.ProfileSetupActivity">
+
+    <TextView
+        android:id="@+id/food_restrictions_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:text="Please select your food restrictions:"/>
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/grid_of_food_restrictions"
+        android:layout_below="@+id/food_restrictions_instructions"
+        android:numColumns="2" />
+
+
+</RelativeLayout>

@@ -7,13 +7,18 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
+import com.uw.fydp.flexeat.flexeat.api.Request;
+import com.uw.fydp.flexeat.flexeat.model.MenuItem;
+import com.uw.fydp.flexeat.flexeat.model.MenuItemInterface;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MenuActivity extends AppCompatActivity implements MenuItemInterface{
+public class MenuActivity extends AppCompatActivity implements MenuItemInterface {
 
     ArrayList<MenuItem> selectedItems = new ArrayList<>();
     JSONObject menuResponse = new JSONObject();

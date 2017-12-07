@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.GridView;
 
+import com.uw.fydp.flexeat.flexeat.adapters.FoodRestrictionsGridAdapter;
+
 public class ProfileSetupActivity extends AppCompatActivity {
 
     String[] foodRestrictions = {

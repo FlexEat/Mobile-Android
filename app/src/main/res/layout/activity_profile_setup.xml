@@ -21,5 +21,11 @@
         android:layout_below="@+id/food_restrictions_instructions"
         android:numColumns="2" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:text="Save and Continue"/>
+
 
 </RelativeLayout>

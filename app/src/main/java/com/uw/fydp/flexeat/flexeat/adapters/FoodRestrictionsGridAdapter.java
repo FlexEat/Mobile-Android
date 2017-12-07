@@ -1,4 +1,4 @@
-package com.uw.fydp.flexeat.flexeat;
+package com.uw.fydp.flexeat.flexeat.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import com.uw.fydp.flexeat.flexeat.R;
 
 /**
  * Created by chaitanyakhanna on 2017-11-05.

@@ -1,4 +1,4 @@
-package com.uw.fydp.flexeat.flexeat;
+package com.uw.fydp.flexeat.flexeat.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.uw.fydp.flexeat.flexeat.model.MenuItem;
+import com.uw.fydp.flexeat.flexeat.R;
 
 import java.util.ArrayList;
 

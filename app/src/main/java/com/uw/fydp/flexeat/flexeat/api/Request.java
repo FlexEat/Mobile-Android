@@ -1,4 +1,4 @@
-package com.uw.fydp.flexeat.flexeat;
+package com.uw.fydp.flexeat.flexeat.api;
 
 import android.os.AsyncTask;
 import android.util.Log;

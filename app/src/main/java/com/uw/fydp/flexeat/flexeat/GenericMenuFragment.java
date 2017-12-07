@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.uw.fydp.flexeat.flexeat.adapters.MenuItemArrayAdapter;
+import com.uw.fydp.flexeat.flexeat.model.MenuItem;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 

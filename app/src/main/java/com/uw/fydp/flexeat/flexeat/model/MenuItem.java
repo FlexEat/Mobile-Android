@@ -1,4 +1,4 @@
-package com.uw.fydp.flexeat.flexeat;
+package com.uw.fydp.flexeat.flexeat.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,8 +8,8 @@ import org.json.JSONObject;
  */
 
 public class MenuItem {
-    String name;
-    boolean isCheck;
+    public String name;
+    public boolean isCheck;
 
     public MenuItem(String name, boolean isChecked){
         this.name = name;

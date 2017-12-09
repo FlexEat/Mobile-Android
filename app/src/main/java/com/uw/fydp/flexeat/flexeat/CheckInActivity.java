@@ -1,6 +1,7 @@
 package com.uw.fydp.flexeat.flexeat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,16 +12,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 public class CheckInActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     EditText restaurantCode;
+    SharedPreferences mPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
+        mPrefs = this.getSharedPreferences("com.uw.fydp.flexeat.flexeat", MODE_PRIVATE);
+        restaurantCode = (EditText) findViewById(R.id.check_in_code_field);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -33,7 +42,15 @@ public class CheckInActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        restaurantCode = (EditText) findViewById(R.id.check_in_code_field);
+
+        //set name, email and image in menu
+        TextView navUserName = navigationView.getHeaderView(0).findViewById(R.id.userNameText);
+        navUserName.setText(mPrefs.getString("userName", ""));
+        TextView navUserEmail = navigationView.getHeaderView(0).findViewById(R.id.userEmailText);
+        navUserEmail.setText(mPrefs.getString("userEmail", ""));
+        String profilePicUrl = mPrefs.getString("userImagePath", "");
+        Picasso.with(getApplicationContext()).load(profilePicUrl).fit().into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profilePic));
+
     }
 
     public void onSubmitClick(View view) {
@@ -62,15 +79,10 @@ public class CheckInActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+        if (id == R.id.nav_edit_profile) {
+            Intent goToProfileEdit = new Intent(CheckInActivity.this, ProfileSetupActivity.class);
+            startActivity(goToProfileEdit);
+        } else if (id == R.id.nav_logout) {
 
         } else if (id == R.id.nav_send) {
 

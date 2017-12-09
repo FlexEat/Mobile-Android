@@ -71,7 +71,7 @@ public class FoodRestrictionsGridAdapter extends BaseAdapter {
         });
 
         vh.foodLabel.setText(arrayListOfFoodRestrictionItem.get(position).name);
-        vh.isChecked.setSelected(data.isCheck);
+        vh.isChecked.setChecked(data.isCheck);
 
         return grid;
     }

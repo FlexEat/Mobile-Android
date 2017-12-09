@@ -47,6 +47,25 @@ public class ProfileSetupActivity extends AppCompatActivity {
             foodRestrictionsJSONArray.put(listOfFoodRestrictions.get(i).getJSONObject());
         }
 
+        //check if any are already selected by user
+        if (mPrefs.contains("userFoodRestrictions")){
+            ArrayList<FoodRestrictionItem> preSelectedRestrictions = new ArrayList<>();
+            // user has already setup their restrictions. need to preselect them
+            String json = mPrefs.getString("userFoodRestrictions", "");
+            Type type = new TypeToken<ArrayList<FoodRestrictionItem>>(){}.getType();
+            Gson gson = new Gson();
+            if (gson.fromJson(json, type) != null){
+                preSelectedRestrictions = gson.fromJson(json, type);
+            }
+            for(int i = 0; i < preSelectedRestrictions.size(); i++){
+                for(int j = 0; j < listOfFoodRestrictions.size(); j++) {
+                    if (listOfFoodRestrictions.get(j).name.equals(preSelectedRestrictions.get(i).name)) {
+                        listOfFoodRestrictions.get(j).setCheck(true);
+                    }
+                }
+            }
+        }
+
         final FoodRestrictionsGridAdapter adapter = new FoodRestrictionsGridAdapter(ProfileSetupActivity.this, listOfFoodRestrictions);
         grid = (GridView)findViewById(R.id.grid_of_food_restrictions);
         grid.setAdapter(adapter);

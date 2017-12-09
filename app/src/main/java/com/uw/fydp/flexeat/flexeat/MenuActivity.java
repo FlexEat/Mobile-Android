@@ -1,16 +1,23 @@
 package com.uw.fydp.flexeat.flexeat;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
 import com.uw.fydp.flexeat.flexeat.api.Request;
 import com.uw.fydp.flexeat.flexeat.model.MenuItem;
@@ -27,6 +34,7 @@ public class MenuActivity extends AppCompatActivity
 
     ArrayList<MenuItem> selectedItems = new ArrayList<>();
     JSONObject menuResponse = new JSONObject();
+    SharedPreferences mPrefs;
 
     PagerAdapter adapter;
     ArrayList<MenuItem> listOfAppetizer = new ArrayList<>();
@@ -43,6 +51,7 @@ public class MenuActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        mPrefs = this.getSharedPreferences("com.uw.fydp.flexeat.flexeat", MODE_PRIVATE);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,6 +63,15 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //set name, email and image in menu
+        TextView navUserName = navigationView.getHeaderView(0).findViewById(R.id.userNameText);
+        navUserName.setText(mPrefs.getString("userName", ""));
+        TextView navUserEmail = navigationView.getHeaderView(0).findViewById(R.id.userEmailText);
+        navUserEmail.setText(mPrefs.getString("userEmail", ""));
+        String profilePicUrl = mPrefs.getString("userImagePath", "");
+        Picasso.with(getApplicationContext()).load(profilePicUrl).fit().into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profilePic));
+
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -166,15 +184,28 @@ public class MenuActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_edit_profile) {
+            Intent goToProfileEdit = new Intent(MenuActivity.this, ProfileSetupActivity.class);
+            startActivity(goToProfileEdit);
+        } else if (id == R.id.nav_logout) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            break;
 
-        } else if (id == R.id.nav_slideshow) {
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getApplicationContext());
+            builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
 
         } else if (id == R.id.nav_send) {
 

@@ -28,18 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".FbLoginActivity" />
         <activity
             android:name=".CheckInActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".MenuActivity"
             android:theme="@style/NoActionBar" />
-        <activity android:name=".ProfileSetupActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ProfileSetupActivity"></activity>
     </application>
 
 </manifest>

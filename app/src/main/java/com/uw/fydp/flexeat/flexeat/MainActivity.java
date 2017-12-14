@@ -1,10 +1,7 @@
 package com.uw.fydp.flexeat.flexeat;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,7 +17,6 @@ import android.widget.TextView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -30,13 +26,10 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    SharedPreferences mPrefs;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mPrefs = this.getSharedPreferences("com.uw.fydp.flexeat.flexeat", MODE_PRIVATE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -57,25 +50,11 @@ public class MainActivity extends AppCompatActivity
                         try {
                             String userID = (String) object.get("id");
                             String fullName = (String) object.get("name");
-                            String emailAddress = (String) object.get("email");
-                            String profilePicUrlString = "https://graph.facebook.com/" + userID+ "/picture?type=large";
-                            URL profilePicUrl = new URL(profilePicUrlString);
+                            URL profilePicUrl = new URL("https://graph.facebook.com/" + userID+ "/picture?type=large");
                             Picasso.with(getApplicationContext()).load(profilePicUrl.toString()).fit().into((ImageView) findViewById(R.id.profilePic));
                             TextView userFullName = (TextView) findViewById(R.id.userFullName);
                             userFullName.setText(fullName);
-                            // store user name and image path into shared preferences so can load in navigation menu
-                            SharedPreferences.Editor editor = mPrefs.edit();
-                            editor.putString("userName", fullName);
-                            editor.putString("userEmail", emailAddress);
-                            editor.putString("userImagePath", profilePicUrlString);
-                            editor.apply();
 
-                            // set name and image for this activity's navigation menu
-                            TextView navBarName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.userNameText);
-                            navBarName.setText(fullName);
-                            TextView navBarEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.userEmailText);
-                            navBarEmail.setText(emailAddress);
-                            Picasso.with(getApplicationContext()).load(profilePicUrl.toString()).fit().into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.profilePic));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -111,31 +90,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_edit_profile) {
-            Intent goToProfileEdit = new Intent(MainActivity.this, ProfileSetupActivity.class);
-            startActivity(goToProfileEdit);
-        } else if (id == R.id.nav_logout) {
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
-                        case DialogInterface.BUTTON_POSITIVE:
-                            LoginManager.getInstance().logOut();
-                            Intent intent = new Intent(MainActivity.this, FbLoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                            break;
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
 
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            //No button clicked
-                            break;
-                    }
-                }
-            };
+        } else if (id == R.id.nav_slideshow) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
-                    .setNegativeButton("No", dialogClickListener).show();
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 

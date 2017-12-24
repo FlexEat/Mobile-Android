@@ -20,7 +20,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 if (isAuthenticated()) {
-                    Intent intent = new Intent(SplashScreenActivity.this, ProfileSetupActivity.class);
+                    Intent intent = new Intent(SplashScreenActivity.this, BaseActivity.class);
                     startActivity(intent);
                     finish();
                 }

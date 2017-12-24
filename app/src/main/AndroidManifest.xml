@@ -36,7 +36,14 @@
         <activity
             android:name=".MenuActivity"
             android:theme="@style/NoActionBar" />
-        <activity android:name=".ProfileSetupActivity"></activity>
+        <activity android:name=".ProfileSetupActivity" />
+        <activity
+            android:name=".BaseActivitytemp"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".BaseActivity"
+            android:label="@string/title_activity_base"
+            android:theme="@style/NoActionBar" />
     </application>
 
 </manifest>

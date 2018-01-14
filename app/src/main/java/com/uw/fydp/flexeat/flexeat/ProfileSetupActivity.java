@@ -40,13 +40,24 @@ public class ProfileSetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setup);
         mPrefs = this.getSharedPreferences("com.uw.fydp.flexeat.flexeat", MODE_PRIVATE);
-        JSONArray foodRestrictionsJSONArray = new JSONArray();
+        Gson gson = new Gson();
+        String json = mPrefs.getString("userFoodRestrictions", "");
+        Type foodRestrictionItemType = new TypeToken<ArrayList<FoodRestrictionItem>>(){}.getType();
+
+        if (gson.fromJson(json, foodRestrictionItemType) != null)
+            listOfSelectedRestrictions = gson.fromJson(json, foodRestrictionItemType);
 
         for(int i = 0 ; i < foodRestrictions.length ; i++){
-            listOfFoodRestrictions.add(new FoodRestrictionItem(foodRestrictions[i], false));
-            foodRestrictionsJSONArray.put(listOfFoodRestrictions.get(i).getJSONObject());
+            boolean hasCurrentFoodRestriction = false;
+            for(int j = 0; j < listOfSelectedRestrictions.size(); j++){
+                if(listOfSelectedRestrictions.get(j).name.equals(foodRestrictions[i])) {
+                    hasCurrentFoodRestriction = true;
+                    break;
+                }
+            }
+            listOfFoodRestrictions.add(new FoodRestrictionItem(foodRestrictions[i], hasCurrentFoodRestriction));
         }
-
+        listOfSelectedRestrictions.clear(); // don't want any old selected values staying when saving again
         final FoodRestrictionsGridAdapter adapter = new FoodRestrictionsGridAdapter(ProfileSetupActivity.this, listOfFoodRestrictions);
         grid = (GridView)findViewById(R.id.grid_of_food_restrictions);
         grid.setAdapter(adapter);
@@ -68,8 +79,9 @@ public class ProfileSetupActivity extends AppCompatActivity {
         editor.putString("userFoodRestrictions", jsonOfSelectedFoodRestrictions);
         editor.apply();
 
-        Intent goToMainScreen = new Intent(ProfileSetupActivity.this, MainActivity.class);
+        Intent goToMainScreen = new Intent(ProfileSetupActivity.this, BaseActivity.class);
         goToMainScreen.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(goToMainScreen);
+        finish();
     }
 }

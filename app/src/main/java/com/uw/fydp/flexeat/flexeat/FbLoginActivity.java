@@ -32,8 +32,8 @@ public class FbLoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.d("test", "successful login");
                 Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
-                Intent goToMainActivity = new Intent(FbLoginActivity.this, BaseActivity.class);
-                startActivity(goToMainActivity);
+                Intent goToProfileActivity = new Intent(FbLoginActivity.this, ProfileSetupActivity.class);
+                startActivity(goToProfileActivity);
                 finish();
             }
 

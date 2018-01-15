@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
 import com.uw.fydp.flexeat.flexeat.api.Request;
-import com.uw.fydp.flexeat.flexeat.model.MenuItem;
+import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
 import com.uw.fydp.flexeat.flexeat.model.MenuItemInterface;
 
 import org.json.JSONArray;
@@ -20,14 +20,14 @@ import java.util.ArrayList;
 
 public class MenuActivity extends AppCompatActivity implements MenuItemInterface {
 
-    ArrayList<MenuItem> selectedItems = new ArrayList<>();
+    ArrayList<FoodMenuItem> selectedItems = new ArrayList<>();
     JSONObject menuResponse = new JSONObject();
 
     PagerAdapter adapter;
-    ArrayList<MenuItem> listOfAppetizer = new ArrayList<>();
-    ArrayList<MenuItem> listOfMainCourse = new ArrayList<>();
-    ArrayList<MenuItem> listOfDrinks = new ArrayList<>();
-    ArrayList<MenuItem> listOfDesserts = new ArrayList<>();
+    ArrayList<FoodMenuItem> listOfAppetizer = new ArrayList<>();
+    ArrayList<FoodMenuItem> listOfMainCourse = new ArrayList<>();
+    ArrayList<FoodMenuItem> listOfDrinks = new ArrayList<>();
+    ArrayList<FoodMenuItem> listOfDesserts = new ArrayList<>();
 
     String[] appetizerNames = {"Spring Rolls", "Samosas", "Chicken Wings", "Nachos", "Garlic Bread", "Chicken Lollipop"};
     String[] mainCourseNames = {"Butter Chicken", "Chili Chicken", "Achari Chicken", "Keema Matar", "Matar Mashroom", "Bindi Masala", "Chana Masala"};
@@ -45,25 +45,25 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
 
         JSONArray appetizerJSONArray = new JSONArray();
         for (int i = 0 ; i < appetizerNames.length ; i++){
-            listOfAppetizer.add(new MenuItem(appetizerNames[i], false));
+            listOfAppetizer.add(new FoodMenuItem(appetizerNames[i], false));
             appetizerJSONArray.put(listOfAppetizer.get(i).getJSONObject());
         }
 
         JSONArray mainCourseJSONArray = new JSONArray();
         for (int i = 0 ; i < mainCourseNames.length ; i++){
-            listOfMainCourse.add(new MenuItem(mainCourseNames[i], false));
+            listOfMainCourse.add(new FoodMenuItem(mainCourseNames[i], false));
             mainCourseJSONArray.put(listOfMainCourse.get(i).getJSONObject());
         }
 
         JSONArray drinksJSONArray = new JSONArray();
         for (int i = 0 ; i < drinksNames.length ; i++){
-            listOfDrinks.add(new MenuItem(drinksNames[i], false));
+            listOfDrinks.add(new FoodMenuItem(drinksNames[i], false));
             drinksJSONArray.put(listOfDrinks.get(i).getJSONObject());
         }
 
         JSONArray dessertsJSONArray = new JSONArray();
         for(int i = 0; i < dessertsNames.length; i++){
-            listOfDesserts.add(new MenuItem(dessertsNames[i], false));
+            listOfDesserts.add(new FoodMenuItem(dessertsNames[i], false));
             dessertsJSONArray.put(listOfDesserts.get(i).getJSONObject());
         }
 
@@ -124,7 +124,7 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
             //TODO: Fix this when server is back
             try{
                 for(int j = 0; j < currentFragment.adapter.getCount(); j++){
-                    MenuItem currentItem = currentFragment.adapter.getItem(j);
+                    FoodMenuItem currentItem = currentFragment.adapter.getItem(j);
                     if(currentItem.isCheck){
                         selectedItems.add(currentItem);
                     }

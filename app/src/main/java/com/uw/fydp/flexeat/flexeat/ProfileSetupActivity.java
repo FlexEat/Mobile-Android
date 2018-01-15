@@ -6,15 +6,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.uw.fydp.flexeat.flexeat.adapters.FoodRestrictionsGridAdapter;
 import com.uw.fydp.flexeat.flexeat.model.FoodRestrictionItem;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class ProfileSetupActivity extends AppCompatActivity {
@@ -34,33 +42,48 @@ public class ProfileSetupActivity extends AppCompatActivity {
 
     GridView grid;
     SharedPreferences mPrefs;
-
+    String userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setup);
-        mPrefs = this.getSharedPreferences("com.uw.fydp.flexeat.flexeat", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = mPrefs.getString("userFoodRestrictions", "");
-        Type foodRestrictionItemType = new TypeToken<ArrayList<FoodRestrictionItem>>(){}.getType();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        GraphRequest request = GraphRequest.newMeRequest(accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            userID= (String) object.get("id");
+                            mPrefs = getApplicationContext().getSharedPreferences("com.uw.fydp.flexeat.flexeat", MODE_PRIVATE);
+                            Gson gson = new Gson();
+                            String json = mPrefs.getString(userID, "");
+                            Type foodRestrictionItemType = new TypeToken<ArrayList<FoodRestrictionItem>>(){}.getType();
 
-        if (gson.fromJson(json, foodRestrictionItemType) != null)
-            listOfSelectedRestrictions = gson.fromJson(json, foodRestrictionItemType);
+                            if (gson.fromJson(json, foodRestrictionItemType) != null)
+                                listOfSelectedRestrictions = gson.fromJson(json, foodRestrictionItemType);
 
-        for(int i = 0 ; i < foodRestrictions.length ; i++){
-            boolean hasCurrentFoodRestriction = false;
-            for(int j = 0; j < listOfSelectedRestrictions.size(); j++){
-                if(listOfSelectedRestrictions.get(j).name.equals(foodRestrictions[i])) {
-                    hasCurrentFoodRestriction = true;
-                    break;
-                }
-            }
-            listOfFoodRestrictions.add(new FoodRestrictionItem(foodRestrictions[i], hasCurrentFoodRestriction));
-        }
-        listOfSelectedRestrictions.clear(); // don't want any old selected values staying when saving again
-        final FoodRestrictionsGridAdapter adapter = new FoodRestrictionsGridAdapter(ProfileSetupActivity.this, listOfFoodRestrictions);
-        grid = (GridView)findViewById(R.id.grid_of_food_restrictions);
-        grid.setAdapter(adapter);
+                            for(int i = 0 ; i < foodRestrictions.length ; i++){
+                                boolean hasCurrentFoodRestriction = false;
+                                for(int j = 0; j < listOfSelectedRestrictions.size(); j++){
+                                    if(listOfSelectedRestrictions.get(j).name.equals(foodRestrictions[i])) {
+                                        hasCurrentFoodRestriction = true;
+                                        break;
+                                    }
+                                }
+                                listOfFoodRestrictions.add(new FoodRestrictionItem(foodRestrictions[i], hasCurrentFoodRestriction));
+                            }
+                            listOfSelectedRestrictions.clear(); // don't want any old selected values staying when saving again
+                            final FoodRestrictionsGridAdapter adapter = new FoodRestrictionsGridAdapter(ProfileSetupActivity.this, listOfFoodRestrictions);
+                            grid = (GridView)findViewById(R.id.grid_of_food_restrictions);
+                            grid.setAdapter(adapter);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }});
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,picture");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
     public void onSaveFoodRestrictions(View view){
@@ -76,7 +99,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = mPrefs.edit();
         Gson gson = new Gson();
         String jsonOfSelectedFoodRestrictions = gson.toJson(listOfSelectedRestrictions);
-        editor.putString("userFoodRestrictions", jsonOfSelectedFoodRestrictions);
+        editor.putString(userID, jsonOfSelectedFoodRestrictions);
         editor.apply();
 
         Intent goToMainScreen = new Intent(ProfileSetupActivity.this, BaseActivity.class);

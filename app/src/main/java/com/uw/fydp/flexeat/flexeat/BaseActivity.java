@@ -45,16 +45,31 @@ public class BaseActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        Intent intent = getIntent();
+        String selectedFragment= intent.getStringExtra("fragment");
 
-        // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment defaultFragment = null;
-        try {
-            defaultFragment = (Fragment) MainFragment.class.newInstance();
+        Fragment fragmentSelected = null;
+
+        try{
+            if(selectedFragment != null && !selectedFragment.equals("")){
+                // passed in which fragment to use
+                // checkIn = CheckInFragment, main = MainFragment
+                if(selectedFragment.equals("checkIn")){
+                    fragmentSelected = (Fragment) CheckInFragment.class.newInstance();
+                } else if (selectedFragment.equals("main")){
+                    fragmentSelected = (Fragment) MainFragment.class.newInstance();
+                }
+            } else {
+                // default to MainFragment
+                fragmentSelected = (Fragment) MainFragment.class.newInstance();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fragmentManager.beginTransaction().replace(R.id.flContent, defaultFragment).commit();
+
+        // Insert the fragment by replacing any existing fragment
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragmentSelected).commit();
     }
 
     @Override
@@ -70,8 +85,6 @@ public class BaseActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Fragment fragment = null;
-        Class fragmentClass;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -92,15 +105,10 @@ public class BaseActivity extends AppCompatActivity
         };
         switch (item.getItemId()) {
             case R.id.home_menu:
-                fragmentClass = MainFragment.class;
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                // Insert the fragment by replacing any existing fragment
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                Intent intent = new Intent(BaseActivity.this, BaseActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("fragment", "main");
+                startActivity(intent);
                 break;
             case R.id.edit_profile_menu:
                 Intent goToProfileActivity = new Intent(BaseActivity.this, ProfileSetupActivity.class);
@@ -118,4 +126,5 @@ public class BaseActivity extends AppCompatActivity
 
         return true;
     }
+
 }

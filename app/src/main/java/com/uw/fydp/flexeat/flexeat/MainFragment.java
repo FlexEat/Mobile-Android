@@ -57,7 +57,8 @@ public class MainFragment extends Fragment {
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CheckInActivity.class);
+                Intent intent = new Intent(getActivity(), BaseActivity.class);
+                intent.putExtra("fragment", "checkIn");
                 startActivity(intent);
             }
         });

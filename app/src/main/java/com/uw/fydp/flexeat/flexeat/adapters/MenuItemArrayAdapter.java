@@ -1,4 +1,4 @@
-package com.uw.fydp.flexeat.flexeat;
+package com.uw.fydp.flexeat.flexeat.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
+import com.uw.fydp.flexeat.flexeat.R;
 
 import java.util.ArrayList;
 
@@ -15,16 +17,16 @@ import java.util.ArrayList;
  * Created by chaitanyakhanna on 2017-07-20.
  */
 
-public class MenuItemArrayAdapter extends CustomArrayAdapter<MenuItem> {
+public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
 
     Context context;
-    ArrayList<MenuItem> arrayListOfMenuItems;
+    ArrayList<FoodMenuItem> arrayListOfFoodMenuItems;
     int resource;
 
-    public MenuItemArrayAdapter(Context context, int resource, ArrayList<MenuItem> values) {
+    public MenuItemArrayAdapter(Context context, int resource, ArrayList<FoodMenuItem> values) {
         super(context, resource, values);
         this.context = context;
-        this.arrayListOfMenuItems = values;
+        this.arrayListOfFoodMenuItems = values;
         this.resource = resource;
     }
 
@@ -48,7 +50,7 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<MenuItem> {
             viewHolder = (ViewHolder) rowView.getTag();
         }
 
-        final MenuItem data = getItem(position); // get data
+        final FoodMenuItem data = getItem(position); // get data
         viewHolder.isChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -72,7 +74,7 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<MenuItem> {
     }
 
     @Override
-    public void fillViewHolder(Object viewHolder, MenuItem data) {
+    public void fillViewHolder(Object viewHolder, FoodMenuItem data) {
         final ViewHolder mViewHolder = (ViewHolder) viewHolder;
         if (data.name != null) {
             mViewHolder.itemName.setText(data.name);

@@ -1,9 +1,11 @@
 package com.uw.fydp.flexeat.flexeat;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,13 +19,18 @@ import org.json.JSONObject;
 
 import java.net.URL;
 
+public class MainFragment extends Fragment {
 
-public class MainActivity extends AppCompatActivity {
+    public MainFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        getActivity().setTitle("Home");
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         GraphRequest request = GraphRequest.newMeRequest(accessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -33,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
                             String userID = (String) object.get("id");
                             String fullName = (String) object.get("name");
                             URL profilePicUrl = new URL("https://graph.facebook.com/" + userID+ "/picture?type=large");
-                            Picasso.with(getApplicationContext()).load(profilePicUrl.toString()).fit().into((ImageView) findViewById(R.id.profilePic));
-                            TextView userFullName = (TextView) findViewById(R.id.userFullName);
+                            Picasso.with(getActivity()).load(profilePicUrl.toString()).fit().into((ImageView) rootView.findViewById(R.id.profilePic));
+                            TextView userFullName = (TextView) rootView.findViewById(R.id.userFullName);
                             userFullName.setText(fullName);
 
                         } catch (Exception e) {
@@ -46,13 +53,15 @@ public class MainActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 
-        Button checkInButton = (Button) findViewById(R.id.check_in_button);
+        Button checkInButton = (Button) rootView.findViewById(R.id.check_in_button);
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CheckInActivity.class);
+                Intent intent = new Intent(getActivity(), BaseActivity.class);
+                intent.putExtra("fragment", "checkIn");
                 startActivity(intent);
             }
         });
+        return rootView;
     }
 }

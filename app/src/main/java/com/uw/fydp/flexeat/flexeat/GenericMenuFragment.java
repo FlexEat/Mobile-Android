@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.uw.fydp.flexeat.flexeat.adapters.MenuItemArrayAdapter;
+import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -20,7 +23,7 @@ public class GenericMenuFragment extends Fragment {
 
     ListView listView;
     JSONArray itemsJSONArray;
-    ArrayList<MenuItem> arrayListOfItems = new ArrayList<>();
+    ArrayList<FoodMenuItem> arrayListOfItems = new ArrayList<>();
     MenuItemArrayAdapter adapter;
 
     @Override
@@ -38,7 +41,7 @@ public class GenericMenuFragment extends Fragment {
         for(int i = 0; i< itemsJSONArray.length(); i++)
         {
             try {
-                arrayListOfItems.add(new MenuItem(itemsJSONArray.getJSONObject(i)));
+                arrayListOfItems.add(new FoodMenuItem(itemsJSONArray.getJSONObject(i)));
             }
             catch (JSONException e) {
                 e.printStackTrace();

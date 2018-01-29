@@ -1,4 +1,4 @@
-package com.uw.fydp.flexeat.flexeat;
+package com.uw.fydp.flexeat.flexeat.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

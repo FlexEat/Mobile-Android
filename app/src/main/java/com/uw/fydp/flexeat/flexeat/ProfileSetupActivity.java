@@ -36,8 +36,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
             "Soy",
             "Halal",
             "Vegan",
-            "Vegetarian",
-            "Other"
+            "Vegetarian"
     };
 
     GridView grid;

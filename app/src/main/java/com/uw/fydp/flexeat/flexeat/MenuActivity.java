@@ -5,10 +5,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
-import com.uw.fydp.flexeat.flexeat.api.Request;
+import com.uw.fydp.flexeat.flexeat.api.RequestBase;
 import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
 import com.uw.fydp.flexeat.flexeat.model.MenuItemInterface;
 
@@ -38,37 +39,77 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        //String menuFromAPI = null;
+        String menuFromAPI = getIntent().getStringExtra("menuAsString");
+        Log.d("menu", menuFromAPI);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         JSONArray appetizerJSONArray = new JSONArray();
-        for (int i = 0 ; i < appetizerNames.length ; i++){
-            listOfAppetizer.add(new FoodMenuItem(appetizerNames[i], false));
-            appetizerJSONArray.put(listOfAppetizer.get(i).getJSONObject());
-        }
-
         JSONArray mainCourseJSONArray = new JSONArray();
-        for (int i = 0 ; i < mainCourseNames.length ; i++){
-            listOfMainCourse.add(new FoodMenuItem(mainCourseNames[i], false));
-            mainCourseJSONArray.put(listOfMainCourse.get(i).getJSONObject());
-        }
-
         JSONArray drinksJSONArray = new JSONArray();
-        for (int i = 0 ; i < drinksNames.length ; i++){
-            listOfDrinks.add(new FoodMenuItem(drinksNames[i], false));
-            drinksJSONArray.put(listOfDrinks.get(i).getJSONObject());
-        }
-
         JSONArray dessertsJSONArray = new JSONArray();
-        for(int i = 0; i < dessertsNames.length; i++){
-            listOfDesserts.add(new FoodMenuItem(dessertsNames[i], false));
-            dessertsJSONArray.put(listOfDesserts.get(i).getJSONObject());
+
+
+        if (menuFromAPI == null) {
+            // default menu
+            for (int i = 0; i < appetizerNames.length; i++) {
+                listOfAppetizer.add(new FoodMenuItem(appetizerNames[i], false));
+                appetizerJSONArray.put(listOfAppetizer.get(i).getJSONObject());
+            }
+
+            for (int i = 0; i < mainCourseNames.length; i++) {
+                listOfMainCourse.add(new FoodMenuItem(mainCourseNames[i], false));
+                mainCourseJSONArray.put(listOfMainCourse.get(i).getJSONObject());
+            }
+
+            for (int i = 0; i < drinksNames.length; i++) {
+                listOfDrinks.add(new FoodMenuItem(drinksNames[i], false));
+                drinksJSONArray.put(listOfDrinks.get(i).getJSONObject());
+            }
+
+            for (int i = 0; i < dessertsNames.length; i++) {
+                listOfDesserts.add(new FoodMenuItem(dessertsNames[i], false));
+                dessertsJSONArray.put(listOfDesserts.get(i).getJSONObject());
+            }
+
+        } else{
+            // menu came from API
+            JSONArray fullMenu;
+
+            try{
+                fullMenu = new JSONArray(menuFromAPI);
+                for (int i = 0; i < fullMenu.length(); i++){
+                    FoodMenuItem currentItem = new FoodMenuItem(fullMenu.getJSONObject(i));
+                    switch (currentItem.category) {
+                        case "Appetizer":
+                            listOfAppetizer.add(currentItem);
+                            appetizerJSONArray.put(fullMenu.getJSONObject(i));
+                            break;
+                        case "Main Course":
+                            listOfMainCourse.add(currentItem);
+                            mainCourseJSONArray.put(fullMenu.getJSONObject(i));
+                            break;
+                        case "Drink":
+                            listOfDrinks.add(currentItem);
+                            drinksJSONArray.put(fullMenu.getJSONObject(i));
+                            break;
+                        case "Dessert":
+                            listOfDesserts.add(currentItem);
+                            dessertsJSONArray.put(fullMenu.getJSONObject(i));
+                            break;
+                    }
+                }
+
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
         }
 
         try{
-            menuResponse.put("appetizers", appetizerJSONArray);
+            menuResponse.put("Appetizer", appetizerJSONArray);
             menuResponse.put("main course", mainCourseJSONArray);
             menuResponse.put("drinks", drinksJSONArray);
             menuResponse.put("desserts", dessertsJSONArray);
@@ -113,8 +154,8 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         for (int i = 0; i<selectedItems.size(); i++){
             selectedItemsJSONArray.put(selectedItems.get(i).getJSONObject());
         }
-        Request request = new Request(selectedItemsJSONArray);
-        request.execute();
+        //RequestBase request = new RequestBase(selectedItemsJSONArray);
+        //request.execute();
     }
 
     @Override

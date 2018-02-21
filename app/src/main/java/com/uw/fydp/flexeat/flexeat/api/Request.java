@@ -1,103 +1,109 @@
 package com.uw.fydp.flexeat.flexeat.api;
 
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
+import android.content.Context;
 
-import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Iterator;
-
 /**
- * Created by chaitanyakhanna on 2017-07-21.
+ * Created by chaitanyakhanna on 2018-02-09.
  */
 
-public class Request extends AsyncTask<String, Void, String>{
+public class Request {
 
-    JSONArray JsonArray = new JSONArray();
+    public interface Callback {
+        /**
+         * Notifies the completion of a successful request
+         * @param success
+         *          always true
+         * @param code
+         *          the HTTP response code
+         * @param res
+         *          the HTTP response
+         */
+        public abstract void onRespond(boolean success, int code, String res, boolean isRemoteResponse);
 
-    public Request(JSONArray JsonArray){
-        this.JsonArray = JsonArray;
+        /**
+         * Notifies the completion of a failed request
+         * @param success
+         *          always false
+         * @param code
+         *          the HTTP response code
+         * @param e
+         *          the cause of the error
+         */
+        public abstract void onError(boolean success, int code, Exception e);
     }
 
-    @Override
-    protected String doInBackground(String... params) {
-        try {
-            URL postURL = new URL("http://192.168.2.211:3000/api/order/");
-            HttpURLConnection connection = (HttpURLConnection) postURL.openConnection();
-            connection.setConnectTimeout(15000);
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-
-            OutputStream os = connection.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getPostDataString(this.JsonArray));
-            writer.flush();
-            writer.close();
-            os.close();
-            int responseCode = connection.getResponseCode();
-            if(responseCode == HttpURLConnection.HTTP_OK){
-                Log.d("Response Code", "SUCCESS");
-            }else{
-                Log.d("Response Code", "FAIL");
-            }
-        }catch (MalformedURLException e){
-            e.printStackTrace();
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return "abc";
+    /**
+     * Executes a GET request
+     * @param context
+     *          the current Context, necessary for getting String resources in error messages
+     * @param url
+     *          a relative URL for the location of the resource
+     * @param callback
+     *          the callback to call on completion of the response
+     */
+    public static void get(Context context, String url, JSONObject header, Callback callback) {
+        executeAsync(url, "GET", null, context, header, callback);
     }
 
-    private String getPostDataString(JSONArray selectedItemsJSONArray) {
-        StringBuilder JSONArrayAsString = new StringBuilder();
+    /**
+     * Executes a POST request
+     * @param context
+     *          the current Context, necessary for getting String resources in error messages
+     * @param url
+     *          a relative URL for the location of the resource
+     * @param parameter
+     *          the body to POST in JSON format
+     * @param callback
+     *          the callback to call on completion of the response
+     */
+    public static void post(Context context, String url, JSONObject parameter, Callback callback) {
+        executeAsync(url, "POST", parameter, context, null, callback);
+    }
 
-        try {
-            boolean first = true;
-            for(int i = 0 ; i < selectedItemsJSONArray.length() ; i++){
-                JSONObject obj = (JSONObject) selectedItemsJSONArray.get(i);
-                Iterator<String> itr = obj.keys();
+    /**
+     * Executes a PUT request
+     * @see Request#post
+     */
+    public static void put(Context context, String url, JSONObject parameter, Callback callback) {
+        executeAsync(url, "PUT", parameter, context, null, callback);
+    }
 
-                while(itr.hasNext()){
+    /**
+     * Executes a DELETE request
+     * @param context
+     *          the current Context, necessary for getting String resources in error messages
+     * @param url
+     *          a relative URL for the location of the resource
+     * @param callback
+     *          the callback to call on completion of the response
+     */
+    public static void delete(Context context, String url, Callback callback) {
+        executeAsync(url, "DELETE", null, context, null, callback);
+    }
 
-                    String key= itr.next();
-                    if (key.equals("name")){
-                        Object value = obj.get(key);
+    /**
+     * Executes the request. Method to be deprecate (instantiate RequestAsync object from calling class on UI thread).
+     */
+    private static void executeAsync(final String url, final String method, final JSONObject parameter, final Context context, final JSONObject headerData, final Callback callback) {
 
-                        if (first)
-                            first = false;
-                        else
-                            JSONArrayAsString.append("&");
-
-                        JSONArrayAsString.append(URLEncoder.encode(key, "UTF-8"));
-                        JSONArrayAsString.append("=");
-                        JSONArrayAsString.append(URLEncoder.encode(value.toString(), "UTF-8"));
-                    }
+        RequestBase request = new RequestBase(url, method, parameter, context, headerData, new RequestBase.Callback() {
+            @Override
+            public void onSuccess(int code, String res, boolean isRemoteResponse) {
+                if (callback != null) {
+                    callback.onRespond(true, code, res, isRemoteResponse);
                 }
             }
+            @Override
+            public void onError(int code, String res) {
+                if (callback != null) {
+                    callback.onError(false, code, new Exception(res));
+                }
+            }
+        });
+        request.execute();
 
-        }catch (JSONException e){
-            e.printStackTrace();
-        }catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
-
-        return JSONArrayAsString.toString();
     }
+
 }

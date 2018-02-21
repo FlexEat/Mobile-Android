@@ -30,7 +30,6 @@ public class FbLoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("test", "successful login");
                 Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG).show();
                 Intent goToProfileActivity = new Intent(FbLoginActivity.this, ProfileSetupActivity.class);
                 startActivity(goToProfileActivity);

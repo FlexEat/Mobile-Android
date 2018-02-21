@@ -9,7 +9,14 @@ import org.json.JSONObject;
 
 public class FoodMenuItem {
     public String name;
-    public boolean isCheck;
+    public int foodItemID;
+    public int restaurantID;
+    public String category;
+    public boolean isCheck = false;
+    public String ingredients;
+    public String price;
+    public String imageURL;
+    public boolean isShownInMenu;
 
     public FoodMenuItem(String name, boolean isChecked){
         this.name = name;
@@ -18,8 +25,15 @@ public class FoodMenuItem {
 
     public FoodMenuItem(JSONObject obj){
         try{
-            this.name = obj.getString("name");
-            this.isCheck = obj.getBoolean("isChecked");
+            this.name = obj.getString("item_name");
+            this.foodItemID = obj.getInt("item_id");
+            this.restaurantID = obj.getInt("restaurant_id");
+            this.category = obj.getString("category");
+            this.ingredients = obj.getString("ingredients");
+            this.price = obj.getString("price");
+            this.imageURL = obj.getString("image_url");
+            this.isShownInMenu = obj.getBoolean("is_shown_in_menu");
+
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -32,8 +46,16 @@ public class FoodMenuItem {
     public JSONObject getJSONObject(){
         JSONObject obj = new JSONObject();
         try{
-            obj.put("name", this.name);
+            obj.put("item_name", this.name);
             obj.put("isChecked", this.isCheck);
+            obj.put("item_id", this.foodItemID);
+            obj.put("restaurant_id", this.restaurantID);
+            obj.put("category", this.category);
+            obj.put("ingredients", this.ingredients);
+            obj.put("price", this.price);
+            obj.put("image_url", this.imageURL);
+            obj.put("is_shown_in_menu", this.isShownInMenu);
+
         }catch (JSONException e){
             e.printStackTrace();
         }

@@ -20,6 +20,8 @@
         android:layout_height="32dp"
         android:layout_margin="16dp"
         android:layout_gravity="center"
+        android:clickable="false"
+        android:focusable="false"
         />
 
 </LinearLayout>

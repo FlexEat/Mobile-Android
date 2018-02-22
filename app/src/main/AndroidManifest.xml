@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".FbLoginActivity"
+            android:theme="@style/NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".MenuActivity"

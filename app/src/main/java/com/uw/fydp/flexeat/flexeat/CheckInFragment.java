@@ -29,6 +29,8 @@ public class CheckInFragment extends Fragment {
     Button submitButton;
     ProgressBar loadingSpinner;
     String restaurantName;
+    String sessionCode;
+    int tableNumber;
     public CheckInFragment() {
         // Required empty public constructor
     }
@@ -94,9 +96,9 @@ public class CheckInFragment extends Fragment {
 
     private void validateCode(){
         String code = restaurantCode.getText().toString();
-        String sessionCode = code.substring(0,3);
+        sessionCode = code.substring(0,3);
         String strtableNumber = code.substring(4,7);
-        int tableNumber = Integer.parseInt(strtableNumber);
+        tableNumber = Integer.parseInt(strtableNumber);
         loadingSpinner.setVisibility(View.VISIBLE);
         String endpoint = "/api/sessions/validate";
         JSONObject requestBody = new JSONObject();
@@ -137,7 +139,7 @@ public class CheckInFragment extends Fragment {
         });
     }
 
-    private void getRestaurantMenu(int restaurantID, final String restaurantName) {
+    private void getRestaurantMenu(final int restaurantID, final String restaurantName) {
         loadingSpinner.setVisibility(View.VISIBLE);
         String endpoint = "/api/menus";
         JSONObject restaurantMenuHeader = new JSONObject();
@@ -161,6 +163,8 @@ public class CheckInFragment extends Fragment {
                         Log.d("res", res);
                         Intent goToMenuScreen = new Intent(getActivity(), MenuActivity.class);
                         goToMenuScreen.putExtra("restaurantName", restaurantName);
+                        goToMenuScreen.putExtra("restaurantID", restaurantID);
+                        goToMenuScreen.putExtra("tableNumber", tableNumber);
                         goToMenuScreen.putExtra("menuAsString", res);
                         startActivity(goToMenuScreen);
                     }

@@ -1,12 +1,20 @@
 package com.uw.fydp.flexeat.flexeat;
 
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
@@ -36,6 +44,8 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     String[] mainCourseNames = {"Butter Chicken", "Chili Chicken", "Achari Chicken", "Keema Matar", "Matar Mashroom", "Bindi Masala", "Chana Masala"};
     String[] drinksNames = {"Slippery Nipple", "Rum and coke", "Glenlevit", "Sex on the Beach", "Screwdriver", "Pepsi", "7up", "Barbican", "Lassi"};
     String[] dessertsNames = {"Gulab Jamun", "Ras Malai", "Gajar ka Halwa", "kheer", "Rasgulla", "Kulfi", "Jalebi"};
+    int tableNumber;
+    int restaurantID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +54,63 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         //String menuFromAPI = null;
         String menuFromAPI = getIntent().getStringExtra("menuAsString");
         String restaurantName = getIntent().getStringExtra("restaurantName");
-
+        tableNumber = getIntent().getIntExtra("tableNumber", -1);
+        restaurantID = getIntent().getIntExtra("restaurantID", -1);
 
         Log.d("menu", menuFromAPI);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(restaurantName);
+
+        LinearLayout layoutInToolbar = (LinearLayout)toolbar.findViewById(R.id.toolbar_item_container);
+        ImageButton waiterButton = new ImageButton(this);
+        ImageButton orderStatusButton = new ImageButton(this);
+        waiterButton.setImageDrawable(getResources().getDrawable(R.drawable.waiter));
+        orderStatusButton.setImageDrawable(getResources().getDrawable(R.drawable.current_order));
+        LinearLayout.LayoutParams paramsToolbar = new LinearLayout.LayoutParams(150, 150);
+        paramsToolbar.gravity = Gravity.RIGHT;
+        paramsToolbar.gravity = Gravity.END;
+        waiterButton.setBackgroundColor(Color.TRANSPARENT);
+        waiterButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        waiterButton.setLayoutParams(paramsToolbar);
+        waiterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "poked the waiter", Toast.LENGTH_LONG).show();
+                String endpoint = "/api/help";
+                JSONObject helpObject = new JSONObject();
+                try{
+                    helpObject.put("restaurant_id", restaurantID);
+                    helpObject.put("table_number", tableNumber);
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
+                Request.post(getApplicationContext(), endpoint, helpObject, new Request.Callback() {
+                    @Override
+                    public void onRespond(boolean success, int code, String res, boolean isRemoteResponse) {
+                        Toast.makeText(getApplicationContext(), "Help is on the way", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(boolean success, int code, Exception e) {
+                        Toast.makeText(getApplicationContext(), "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        orderStatusButton.setBackgroundColor(Color.TRANSPARENT);
+        orderStatusButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        orderStatusButton.setLayoutParams(paramsToolbar);
+        orderStatusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "check current order", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        layoutInToolbar.addView(waiterButton);
+        layoutInToolbar.addView(orderStatusButton);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -165,7 +225,9 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         }
         JSONObject selectedItems = new JSONObject();
         try{
-            selectedItems.put("selectedItems", selectedItemsJSONArray);
+            selectedItems.put("selected_items", selectedItemsJSONArray);
+            selectedItems.put("restaurant_id", restaurantID);
+            selectedItems.put("table_number", tableNumber);
         } catch (JSONException e){
             e.printStackTrace();
         }

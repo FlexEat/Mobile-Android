@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -43,6 +44,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         Animation a = AnimationUtils.loadAnimation(this, R.anim.scale);
         a.reset();
         TextView tv = (TextView) findViewById(R.id.splash_screen_text);
+        ImageView image = (ImageView) findViewById(R.id.flexeat_logo);
+        image.clearAnimation();
+        image.startAnimation(a);
         tv.clearAnimation();
         tv.startAnimation(a);
     }

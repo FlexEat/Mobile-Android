@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="48dp">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/food_item_picture"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/food_item_picture"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:id="@+id/food_item_name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/food_item_ingredients"
+            android:textSize="12sp"
+            android:layout_below="@id/food_item_name"
+            android:layout_marginTop="16dp"
+            />
+
+
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

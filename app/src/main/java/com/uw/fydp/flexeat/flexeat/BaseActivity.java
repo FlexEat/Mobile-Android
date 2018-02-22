@@ -17,8 +17,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
+
+import java.net.URL;
 
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,7 +52,7 @@ public class BaseActivity extends AppCompatActivity
         toggle.syncState();
 
         //NavigationView
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         Intent intent = getIntent();
@@ -70,6 +80,31 @@ public class BaseActivity extends AppCompatActivity
 
         // Insert the fragment by replacing any existing fragment
         fragmentManager.beginTransaction().replace(R.id.flContent, fragmentSelected).commit();
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        GraphRequest request = GraphRequest.newMeRequest(accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            String userID = (String) object.get("id");
+                            String fullName = (String) object.get("name");
+                            String userEmail = (String) object.get("email");
+                            URL profilePicUrl = new URL("https://graph.facebook.com/" + userID+ "/picture?type=large");
+                            Picasso.with(getApplicationContext()).load(profilePicUrl.toString()).fit().into((ImageView) navigationView.findViewById(R.id.user_image));
+                            TextView userFullName = (TextView) navigationView.findViewById(R.id.user_name);
+                            TextView email = (TextView)navigationView.findViewById(R.id.user_email);
+                            userFullName.setText(fullName);
+                            email.setText(userEmail);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }});
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,picture");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
     @Override

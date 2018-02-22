@@ -13,12 +13,15 @@
 
         <EditText
             android:id="@+id/check_in_code_field"
+            android:hint="Enter Code"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginBottom="16dp"
+            android:inputType="textNoSuggestions|textVisiblePassword"
+            android:maxLines="1"
             />
 
         <Button

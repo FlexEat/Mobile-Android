@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
+import com.uw.fydp.flexeat.flexeat.api.Request;
 import com.uw.fydp.flexeat.flexeat.api.RequestBase;
 import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
 import com.uw.fydp.flexeat.flexeat.model.MenuItemInterface;
@@ -41,10 +43,15 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         setContentView(R.layout.activity_menu);
         //String menuFromAPI = null;
         String menuFromAPI = getIntent().getStringExtra("menuAsString");
+        String restaurantName = getIntent().getStringExtra("restaurantName");
+
+
         Log.d("menu", menuFromAPI);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(restaurantName);
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         JSONArray appetizerJSONArray = new JSONArray();
@@ -52,6 +59,8 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         JSONArray drinksJSONArray = new JSONArray();
         JSONArray dessertsJSONArray = new JSONArray();
 
+        // uncomment the next line to use the mock menu data
+        //menuFromAPI = null;
 
         if (menuFromAPI == null) {
             // default menu
@@ -154,8 +163,25 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         for (int i = 0; i<selectedItems.size(); i++){
             selectedItemsJSONArray.put(selectedItems.get(i).getJSONObject());
         }
-        //RequestBase request = new RequestBase(selectedItemsJSONArray);
-        //request.execute();
+        JSONObject selectedItems = new JSONObject();
+        try{
+            selectedItems.put("selectedItems", selectedItemsJSONArray);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        String endpoint = "/api/order";
+        Request.post(getApplicationContext(), endpoint, selectedItems, new Request.Callback() {
+            @Override
+            public void onRespond(boolean success, int code, String res, boolean isRemoteResponse) {
+                if (success)
+                    finish();
+            }
+
+            @Override
+            public void onError(boolean success, int code, Exception e) {
+                Toast.makeText(getApplicationContext(), "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

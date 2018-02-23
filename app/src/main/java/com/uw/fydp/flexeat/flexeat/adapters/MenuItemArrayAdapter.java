@@ -79,6 +79,6 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
         if (data.name != null) {
             mViewHolder.itemName.setText(data.name);
         }
-        mViewHolder.isChecked.setSelected(data.isCheck);
+        //mViewHolder.isChecked.setSelected(data.);
     }
 }

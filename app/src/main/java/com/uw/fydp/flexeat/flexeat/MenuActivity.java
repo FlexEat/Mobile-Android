@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
 import com.uw.fydp.flexeat.flexeat.api.Request;
-import com.uw.fydp.flexeat.flexeat.api.RequestBase;
 import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
 import com.uw.fydp.flexeat.flexeat.model.MenuItemInterface;
 
@@ -77,7 +76,6 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         waiterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "poked the waiter", Toast.LENGTH_LONG).show();
                 String endpoint = "/api/help";
                 JSONObject helpObject = new JSONObject();
                 try{
@@ -254,7 +252,7 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
             try{
                 for(int j = 0; j < currentFragment.adapter.getCount(); j++){
                     FoodMenuItem currentItem = currentFragment.adapter.getItem(j);
-                    if(currentItem.isCheck){
+                    if(currentItem.quantity > 0){
                         selectedItems.add(currentItem);
                     }
                 }

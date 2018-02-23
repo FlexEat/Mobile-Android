@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,19 +65,44 @@ public class GenericMenuFragment extends Fragment {
         listView.setItemsCanFocus(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
                 final Dialog dialog = new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.layout_menu_item_dialog);
-                ImageView image = (ImageView)dialog.findViewById(R.id.food_item_picture);
                 TextView name = (TextView) dialog.findViewById(R.id.food_item_name);
-                TextView ingredients = (TextView) dialog.findViewById(R.id.food_item_ingredients);
+                TextView description = (TextView) dialog.findViewById(R.id.food_item_description);
+                Button decreaseQuantity = (Button) dialog.findViewById(R.id.decrease_quantity_button);
+                Button increaseQuantity = (Button) dialog.findViewById(R.id.increase_quantity_button);
+                final TextView displayQuantity = (TextView) dialog.findViewById(R.id.quantity_display);
+                displayQuantity.setText(Integer.toString(arrayListOfItems.get(i).quantity));
 
-                Picasso.with(getContext())
+                decreaseQuantity.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (arrayListOfItems.get(i).quantity > 0){
+                            arrayListOfItems.get(i).quantity--;
+                        }
+                        displayQuantity.setText(Integer.toString(arrayListOfItems.get(i).quantity));
+                    }
+                });
+
+                increaseQuantity.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (arrayListOfItems.get(i).quantity < 10){
+                            arrayListOfItems.get(i).quantity++;
+                        }
+                        displayQuantity.setText(Integer.toString(arrayListOfItems.get(i).quantity));
+                    }
+                });
+
+                Picasso.with(getActivity())
                         .load(arrayListOfItems.get(i).imageURL)
-                        .resize(64,64).noFade().into(image);
+                        .fit().into((ImageView) dialog.findViewById(R.id.food_item_picture));
+
                 name.setText(arrayListOfItems.get(i).name);
-                ingredients.setText(arrayListOfItems.get(i).ingredients);
+                description.setText(arrayListOfItems.get(i).description);
 
 
 

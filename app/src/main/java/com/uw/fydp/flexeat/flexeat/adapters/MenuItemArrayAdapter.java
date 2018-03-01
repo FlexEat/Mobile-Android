@@ -32,7 +32,7 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
 
     private class ViewHolder {
         TextView itemName;
-        CheckBox isChecked;
+        TextView itemPrice;
     }
 
     @Override
@@ -51,12 +51,7 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
         }
 
         final FoodMenuItem data = getItem(position); // get data
-        viewHolder.isChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                data.setCheck(isChecked);
-            }
-        });
+
         fillViewHolder(viewHolder, data); // Populate View Holder
 
         return rowView; // Return view (required by super class)
@@ -68,7 +63,7 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
         final ViewHolder viewHolder = new ViewHolder();
 
         viewHolder.itemName = (TextView) rowView.findViewById(R.id.item_name);
-        viewHolder.isChecked = (CheckBox) rowView.findViewById(R.id.item_selection);
+        viewHolder.itemPrice = (TextView) rowView.findViewById(R.id.item_price);
 
         return viewHolder;
     }
@@ -78,7 +73,12 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
         final ViewHolder mViewHolder = (ViewHolder) viewHolder;
         if (data.name != null) {
             mViewHolder.itemName.setText(data.name);
+            if(data.status != ""){
+                mViewHolder.itemPrice.setText(data.status);
+            } else{
+                mViewHolder.itemPrice.setText(data.price);
+            }
+
         }
-        //mViewHolder.isChecked.setSelected(data.);
     }
 }

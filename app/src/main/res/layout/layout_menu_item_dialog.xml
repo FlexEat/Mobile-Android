@@ -68,6 +68,7 @@
             android:layout_below="@id/quantity_picker"
             android:layout_centerHorizontal="true"
             android:text="Add to Order"
+            android:id="@+id/add_to_order_button"
             android:layout_marginTop="16dp"/>
 
     </RelativeLayout>

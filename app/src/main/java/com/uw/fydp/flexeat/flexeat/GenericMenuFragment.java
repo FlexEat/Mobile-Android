@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by chaitanyakhanna on 2017-10-23.
@@ -35,6 +36,7 @@ public class GenericMenuFragment extends Fragment {
     ListView listView;
     JSONArray itemsJSONArray;
     ArrayList<FoodMenuItem> arrayListOfItems = new ArrayList<>();
+    HashMap<Integer, FoodMenuItem> mapOfSelectedItems = new HashMap<>();
     MenuItemArrayAdapter adapter;
 
     @Override
@@ -98,13 +100,23 @@ public class GenericMenuFragment extends Fragment {
                 });
 
                 Picasso.with(getActivity())
+                        .setLoggingEnabled(true);
+
+                Picasso.with(getActivity())
                         .load(arrayListOfItems.get(i).imageURL)
-                        .fit().into((ImageView) dialog.findViewById(R.id.food_item_picture));
+                        .into((ImageView) dialog.findViewById(R.id.food_item_picture));
 
                 name.setText(arrayListOfItems.get(i).name);
                 description.setText(arrayListOfItems.get(i).description);
 
-
+                Button addToOrderButton = (Button)dialog.findViewById(R.id.add_to_order_button);
+                addToOrderButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mapOfSelectedItems.put(arrayListOfItems.get(i).foodItemID, arrayListOfItems.get(i));
+                        dialog.cancel();
+                    }
+                });
 
                 dialog.show();
 

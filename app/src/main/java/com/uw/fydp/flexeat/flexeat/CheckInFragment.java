@@ -141,16 +141,9 @@ public class CheckInFragment extends Fragment {
 
     private void getRestaurantMenu(final int restaurantID, final String restaurantName) {
         loadingSpinner.setVisibility(View.VISIBLE);
-        String endpoint = "/api/menus";
-        JSONObject restaurantMenuHeader = new JSONObject();
-        try {
-            restaurantMenuHeader.put("restaurant-id", restaurantID);
-        }
-        catch (JSONException e){
-            e.printStackTrace();
-        }
+        String endpoint = "/api/menus/"+ Integer.toString(restaurantID);
 
-        Request.get(getContext(), endpoint, restaurantMenuHeader, new Request.Callback(){
+        Request.get(getContext(), endpoint, null, new Request.Callback(){
 
             @Override
             public void onRespond(boolean success, int code, final String res, boolean isRemoteResponse) {

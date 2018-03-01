@@ -12,49 +12,46 @@ public class FoodMenuItem {
     public int foodItemID;
     public int restaurantID;
     public String category;
-    public boolean isCheck = false;
-    public String ingredients;
+    public int quantity = 0;
+    public String description;
     public String price;
     public String imageURL;
     public boolean isShownInMenu;
+    public String status;
 
     public FoodMenuItem(String name, boolean isChecked){
         this.name = name;
-        this.isCheck = isChecked;
     }
 
     public FoodMenuItem(JSONObject obj){
-        try{
-            this.name = obj.getString("item_name");
-            this.foodItemID = obj.getInt("item_id");
-            this.restaurantID = obj.getInt("restaurant_id");
-            this.category = obj.getString("category");
-            this.ingredients = obj.getString("ingredients");
-            this.price = obj.getString("price");
-            this.imageURL = obj.getString("image_url");
-            this.isShownInMenu = obj.getBoolean("is_shown_in_menu");
-
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+        this.name = obj.optString("item_name", "");
+        this.foodItemID = obj.optInt("item_id", -1);
+        this.restaurantID = obj.optInt("restaurant_id", -1);
+        this.category = obj.optString("category", "");
+        this.description = obj.optString("description", "");
+        this.price = obj.optString("price", "");
+        this.imageURL = obj.optString("image_url", "");
+        this.isShownInMenu = obj.optBoolean("is_shown_in_menu", true);
+        this.status = obj.optString("status", "");
     }
 
     public void setCheck(boolean check){
-        this.isCheck = check;
+        this.quantity = 0;
     }
 
     public JSONObject getJSONObject(){
         JSONObject obj = new JSONObject();
         try{
             obj.put("item_name", this.name);
-            obj.put("isChecked", this.isCheck);
+            obj.put("quantity", this.quantity);
             obj.put("item_id", this.foodItemID);
             obj.put("restaurant_id", this.restaurantID);
             obj.put("category", this.category);
-            obj.put("ingredients", this.ingredients);
+            obj.put("ingredients", this.description);
             obj.put("price", this.price);
             obj.put("image_url", this.imageURL);
             obj.put("is_shown_in_menu", this.isShownInMenu);
+            obj.put("status", this.status);
 
         }catch (JSONException e){
             e.printStackTrace();

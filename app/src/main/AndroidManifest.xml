@@ -17,29 +17,34 @@
 
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/SplashTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FbLoginActivity"
-            android:theme="@style/NoActionBar"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".FbLoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".MenuActivity"
-            android:theme="@style/NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ProfileSetupActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".ProfileSetupActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar"
             android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".OrdersActivity" />
+        <activity android:name=".PayActivity" />
+        <activity android:name=".RatingActivity"></activity>
     </application>
 
 </manifest>

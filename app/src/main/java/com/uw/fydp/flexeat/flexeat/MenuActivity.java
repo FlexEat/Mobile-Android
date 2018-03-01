@@ -1,17 +1,27 @@
 package com.uw.fydp.flexeat.flexeat;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.uw.fydp.flexeat.flexeat.adapters.MenuItemArrayAdapter;
 import com.uw.fydp.flexeat.flexeat.adapters.PagerAdapter;
 import com.uw.fydp.flexeat.flexeat.api.Request;
-import com.uw.fydp.flexeat.flexeat.api.RequestBase;
 import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
 import com.uw.fydp.flexeat.flexeat.model.MenuItemInterface;
 
@@ -20,10 +30,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MenuActivity extends AppCompatActivity implements MenuItemInterface {
 
-    ArrayList<FoodMenuItem> selectedItems = new ArrayList<>();
+    ArrayList<FoodMenuItem> listOfSelectedItems = new ArrayList<>();
     JSONObject menuResponse = new JSONObject();
 
     PagerAdapter adapter;
@@ -36,6 +47,11 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     String[] mainCourseNames = {"Butter Chicken", "Chili Chicken", "Achari Chicken", "Keema Matar", "Matar Mashroom", "Bindi Masala", "Chana Masala"};
     String[] drinksNames = {"Slippery Nipple", "Rum and coke", "Glenlevit", "Sex on the Beach", "Screwdriver", "Pepsi", "7up", "Barbican", "Lassi"};
     String[] dessertsNames = {"Gulab Jamun", "Ras Malai", "Gajar ka Halwa", "kheer", "Rasgulla", "Kulfi", "Jalebi"};
+    int tableNumber;
+    int restaurantID;
+    String restaurantName;
+
+    Dialog reviewOrderDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +59,67 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         setContentView(R.layout.activity_menu);
         //String menuFromAPI = null;
         String menuFromAPI = getIntent().getStringExtra("menuAsString");
-        String restaurantName = getIntent().getStringExtra("restaurantName");
-
+        restaurantName = getIntent().getStringExtra("restaurantName");
+        tableNumber = getIntent().getIntExtra("tableNumber", -1);
+        restaurantID = getIntent().getIntExtra("restaurantID", -1);
 
         Log.d("menu", menuFromAPI);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(restaurantName);
+
+        LinearLayout layoutInToolbar = (LinearLayout)toolbar.findViewById(R.id.toolbar_item_container);
+        ImageButton waiterButton = new ImageButton(this);
+        ImageButton orderStatusButton = new ImageButton(this);
+        waiterButton.setImageDrawable(getResources().getDrawable(R.drawable.waiter));
+        orderStatusButton.setImageDrawable(getResources().getDrawable(R.drawable.current_order));
+        LinearLayout.LayoutParams paramsToolbar = new LinearLayout.LayoutParams(150, 150);
+        paramsToolbar.gravity = Gravity.RIGHT;
+        paramsToolbar.gravity = Gravity.END;
+        waiterButton.setBackgroundColor(Color.TRANSPARENT);
+        waiterButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        waiterButton.setLayoutParams(paramsToolbar);
+        waiterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String endpoint = "/api/help";
+                JSONObject helpObject = new JSONObject();
+                try{
+                    helpObject.put("restaurant_id", restaurantID);
+                    helpObject.put("table_number", tableNumber);
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
+                Request.post(getApplicationContext(), endpoint, helpObject, new Request.Callback() {
+                    @Override
+                    public void onRespond(boolean success, int code, String res, boolean isRemoteResponse) {
+                        Toast.makeText(getApplicationContext(), "Help is on the way", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(boolean success, int code, Exception e) {
+                        Toast.makeText(getApplicationContext(), "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        orderStatusButton.setBackgroundColor(Color.TRANSPARENT);
+        orderStatusButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        orderStatusButton.setLayoutParams(paramsToolbar);
+        orderStatusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToOrderScreen = new Intent(MenuActivity.this, OrdersActivity.class);
+                goToOrderScreen.putExtra("restaurant_id", restaurantID);
+                goToOrderScreen.putExtra("table_number", tableNumber);
+                goToOrderScreen.putExtra("restaurant_name", restaurantName);
+                startActivity(goToOrderScreen);
+            }
+        });
+
+        layoutInToolbar.addView(waiterButton);
+        layoutInToolbar.addView(orderStatusButton);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -101,11 +170,11 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
                             listOfMainCourse.add(currentItem);
                             mainCourseJSONArray.put(fullMenu.getJSONObject(i));
                             break;
-                        case "Drink":
+                        case "Drinks":
                             listOfDrinks.add(currentItem);
                             drinksJSONArray.put(fullMenu.getJSONObject(i));
                             break;
-                        case "Dessert":
+                        case "Desserts":
                             listOfDesserts.add(currentItem);
                             dessertsJSONArray.put(fullMenu.getJSONObject(i));
                             break;
@@ -156,16 +225,42 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         });
     }
 
-    public void onSubmitOrderClick(View view) {
-        selectedItems.clear();
+    public void onReviewOrderClick(View view) {
+        listOfSelectedItems.clear();
         getSelectedItems();
+
+        if(listOfSelectedItems.size() > 0) {
+
+            reviewOrderDialog = new Dialog(this);
+            reviewOrderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            reviewOrderDialog.setContentView(R.layout.layout_review_order_dialog);
+            ListView listForReviewOrder = (ListView) reviewOrderDialog.findViewById(R.id.review_order_list);
+            Button submitOrder = (Button) reviewOrderDialog.findViewById(R.id.submit_order_button);
+            MenuItemArrayAdapter reviewOrder = new MenuItemArrayAdapter(getApplicationContext(), R.layout.item_menu, listOfSelectedItems);
+            listForReviewOrder.setAdapter(reviewOrder);
+            submitOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onSubmitOrder(view);
+                }
+            });
+            reviewOrderDialog.show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Please add items to your order", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void onSubmitOrder(View view){
         JSONArray selectedItemsJSONArray = new JSONArray();
-        for (int i = 0; i<selectedItems.size(); i++){
-            selectedItemsJSONArray.put(selectedItems.get(i).getJSONObject());
+        for (int i = 0; i< listOfSelectedItems.size(); i++){
+            selectedItemsJSONArray.put(listOfSelectedItems.get(i).getJSONObject());
         }
         JSONObject selectedItems = new JSONObject();
         try{
-            selectedItems.put("selectedItems", selectedItemsJSONArray);
+            selectedItems.put("selected_items", selectedItemsJSONArray);
+            selectedItems.put("restaurant_id", restaurantID);
+            selectedItems.put("table_number", tableNumber);
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -174,7 +269,12 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
             @Override
             public void onRespond(boolean success, int code, String res, boolean isRemoteResponse) {
                 if (success)
-                    finish();
+                    Toast.makeText(getApplicationContext(), "Order Submitted", Toast.LENGTH_SHORT).show();
+                for(int i = 0; i < adapter.getCount(); i++){
+                    GenericMenuFragment currentFragment = (GenericMenuFragment)adapter.getItem(i);
+                    currentFragment.mapOfSelectedItems.clear();
+                }
+                reviewOrderDialog.cancel();
             }
 
             @Override
@@ -186,20 +286,16 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
 
     @Override
     public void getSelectedItems() {
-        for(int i = 0; i<adapter.getCount(); i++){
-            GenericMenuFragment currentFragment = (GenericMenuFragment) adapter.getFragment(i);
-            //TODO: Fix this when server is back
+        HashMap<Integer, FoodMenuItem> mapOfAllSelectedItems = new HashMap<>();
+        for(int i = 0; i < adapter.getCount(); i++){
+            GenericMenuFragment currentFragment = (GenericMenuFragment) adapter.getItem(i);
             try{
-                for(int j = 0; j < currentFragment.adapter.getCount(); j++){
-                    FoodMenuItem currentItem = currentFragment.adapter.getItem(j);
-                    if(currentItem.isCheck){
-                        selectedItems.add(currentItem);
-                    }
-                }
+                mapOfAllSelectedItems.putAll(currentFragment.mapOfSelectedItems);
             }
             catch (NullPointerException e){
                 e.printStackTrace();
             }
         }
+        listOfSelectedItems.addAll(mapOfAllSelectedItems.values());
     }
 }

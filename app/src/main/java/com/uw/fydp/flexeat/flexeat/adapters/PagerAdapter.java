@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 /**
  * Created by chaitanyakhanna on 2017-07-20.
@@ -23,8 +24,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     int mNumOfTabs;
     JSONObject menuResponse;
-
-    private final SparseArray<WeakReference<Fragment>> instantiatedFragments = new SparseArray<>();
 
     public PagerAdapter(FragmentManager fm, int numOfTabs, JSONObject menuResponse) {
         super(fm);
@@ -36,7 +35,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
         try {
-
             GenericMenuFragment tab = new GenericMenuFragment();
             bundle.putString("itemsAsString", menuResponse.getJSONArray(menuResponse.names().getString(position)).toString());
             tab.setArguments(bundle);
@@ -50,28 +48,5 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return mNumOfTabs;
-    }
-
-    @Override
-    public Object instantiateItem(final ViewGroup container, final int position) {
-        final Fragment fragment = (Fragment) super.instantiateItem(container, position);
-        instantiatedFragments.put(position, new WeakReference<>(fragment));
-        return fragment;
-    }
-
-    @Override
-    public void destroyItem(final ViewGroup container, final int position, final Object object) {
-        instantiatedFragments.remove(position);
-        super.destroyItem(container, position, object);
-    }
-
-    @Nullable
-    public Fragment getFragment(final int position) {
-        final WeakReference<Fragment> wr = instantiatedFragments.get(position);
-        if (wr != null) {
-            return wr.get();
-        } else {
-            return null;
-        }
     }
 }

@@ -44,10 +44,13 @@
             <Button
                 android:id="@+id/check_in_button"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="74dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:padding="16dp"
+                android:textColor="@android:color/white"
+                android:theme="@style/materialButton"
                 android:text="Check In"/>
 
         </LinearLayout>

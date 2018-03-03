@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by chaitanyakhanna on 2017-07-20.
@@ -24,6 +25,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     int mNumOfTabs;
     JSONObject menuResponse;
+
+    HashMap<Integer, Fragment> allFragments = new HashMap<>();
 
     public PagerAdapter(FragmentManager fm, int numOfTabs, JSONObject menuResponse) {
         super(fm);
@@ -45,8 +48,19 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         return null;
     }
 
+    public Fragment getFragment(int position){
+        return allFragments.get(position);
+    }
+
     @Override
     public int getCount() {
         return mNumOfTabs;
+    }
+
+    @Override
+    public Object instantiateItem(final ViewGroup container, final int position) {
+        final Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        allFragments.put(position, fragment);
+        return fragment;
     }
 }

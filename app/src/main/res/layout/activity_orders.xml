@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list_of_orders"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="74dp"
         android:visibility="invisible"/>
 
     <LinearLayout
@@ -21,17 +21,21 @@
         android:id="@+id/buttons_layout">
 
         <Button
+            android:theme="@style/materialButton"
+            android:textColor="@android:color/white"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="74dp"
             android:padding="16dp"
             android:text="Call Waiter to Pay"
             android:id="@+id/waiter_pay_button"
             android:layout_weight="0.5"/>
 
         <Button
+            android:theme="@style/materialButton"
+            android:textColor="@android:color/white"
             android:layout_width="0dp"
             android:padding="16dp"
-            android:layout_height="wrap_content"
+            android:layout_height="74dp"
             android:text="Pay via Application"
             android:id="@+id/application_pay_button"
             android:layout_weight="0.5"/>

@@ -19,15 +19,21 @@ import java.util.ArrayList;
 
 public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
 
+    public final static int SHOW_QUANTITY = 0;
+    public final static int SHOW_PRICE = 1;
+    public final static int SHOW_STATUS = 2;
+
     Context context;
     ArrayList<FoodMenuItem> arrayListOfFoodMenuItems;
     int resource;
+    int displayType;
 
-    public MenuItemArrayAdapter(Context context, int resource, ArrayList<FoodMenuItem> values) {
+    public MenuItemArrayAdapter(Context context, int resource, ArrayList<FoodMenuItem> values, int typeOfDisplay) {
         super(context, resource, values);
         this.context = context;
         this.arrayListOfFoodMenuItems = values;
         this.resource = resource;
+        this.displayType = typeOfDisplay;
     }
 
     private class ViewHolder {
@@ -73,10 +79,12 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
         final ViewHolder mViewHolder = (ViewHolder) viewHolder;
         if (data.name != null) {
             mViewHolder.itemName.setText(data.name);
-            if(data.status != ""){
+            if(this.displayType == SHOW_STATUS){
                 mViewHolder.itemPrice.setText(data.status);
-            } else{
+            } else if (this.displayType == SHOW_PRICE){
                 mViewHolder.itemPrice.setText(data.price);
+            } else if (this.displayType == SHOW_QUANTITY){
+                mViewHolder.itemPrice.setText(Integer.toString(data.quantity));
             }
 
         }

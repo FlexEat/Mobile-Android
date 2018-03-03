@@ -61,7 +61,7 @@ public class GenericMenuFragment extends Fragment {
             }
         }
 
-        adapter = new MenuItemArrayAdapter(getContext(), R.layout.item_menu, arrayListOfItems);
+        adapter = new MenuItemArrayAdapter(getContext(), R.layout.item_menu, arrayListOfItems, MenuItemArrayAdapter.SHOW_PRICE);
 
         listView = (ListView) rootView.findViewById(R.id.generic_menu_list);
         listView.setItemsCanFocus(true);
@@ -100,9 +100,6 @@ public class GenericMenuFragment extends Fragment {
                 });
 
                 Picasso.with(getActivity())
-                        .setLoggingEnabled(true);
-
-                Picasso.with(getActivity())
                         .load(arrayListOfItems.get(i).imageURL)
                         .into((ImageView) dialog.findViewById(R.id.food_item_picture));
 
@@ -110,6 +107,7 @@ public class GenericMenuFragment extends Fragment {
                 description.setText(arrayListOfItems.get(i).description);
 
                 Button addToOrderButton = (Button)dialog.findViewById(R.id.add_to_order_button);
+                addToOrderButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 addToOrderButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

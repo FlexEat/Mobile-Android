@@ -43,7 +43,7 @@ public class FoodMenuItem {
         JSONObject obj = new JSONObject();
         try{
             obj.put("item_name", this.name);
-            obj.put("quantity", this.quantity);
+            obj.put("item_quantity", this.quantity);
             obj.put("item_id", this.foodItemID);
             obj.put("restaurant_id", this.restaurantID);
             obj.put("category", this.category);

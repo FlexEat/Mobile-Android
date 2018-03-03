@@ -96,9 +96,19 @@ public class CheckInFragment extends Fragment {
 
     private void validateCode(){
         String code = restaurantCode.getText().toString();
+        if (code.length() != 7){
+            Toast.makeText(getContext(), "Enter Valid Code", Toast.LENGTH_LONG).show();
+            return;
+        }
         sessionCode = code.substring(0,3);
         String strtableNumber = code.substring(4,7);
         tableNumber = Integer.parseInt(strtableNumber);
+
+        if (sessionCode.length() != 3 || strtableNumber.length() != 3){
+            Toast.makeText(getContext(), "Enter Valid Code", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         loadingSpinner.setVisibility(View.VISIBLE);
         String endpoint = "/api/sessions/validate";
         JSONObject requestBody = new JSONObject();
@@ -141,7 +151,7 @@ public class CheckInFragment extends Fragment {
 
     private void getRestaurantMenu(final int restaurantID, final String restaurantName) {
         loadingSpinner.setVisibility(View.VISIBLE);
-        String endpoint = "/api/menus/"+ Integer.toString(restaurantID);
+        String endpoint = "/api/menus/"+ Integer.toString(restaurantID) + "?customer=true";
 
         Request.get(getContext(), endpoint, null, new Request.Callback(){
 
@@ -152,7 +162,6 @@ public class CheckInFragment extends Fragment {
 
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(), "got something", Toast.LENGTH_LONG).show();
                         Log.d("res", res);
                         Intent goToMenuScreen = new Intent(getActivity(), MenuActivity.class);
                         goToMenuScreen.putExtra("restaurantName", restaurantName);

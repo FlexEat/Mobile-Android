@@ -42,7 +42,7 @@ public class OrdersActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getIntent().getStringExtra("restaurant_name"));
 
         orderList = (ListView)findViewById(R.id.list_of_orders);
-        adapter = new MenuItemArrayAdapter(getApplicationContext(), R.layout.item_menu, arrayOfOrderItems);
+        adapter = new MenuItemArrayAdapter(getApplicationContext(), R.layout.item_menu, arrayOfOrderItems, MenuItemArrayAdapter.SHOW_STATUS);
         orderList.setAdapter(adapter);
 
         buttonsLayout = (LinearLayout) findViewById(R.id.buttons_layout);

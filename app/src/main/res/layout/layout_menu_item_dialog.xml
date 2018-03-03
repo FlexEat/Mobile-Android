@@ -68,6 +68,9 @@
             android:layout_below="@id/quantity_picker"
             android:layout_centerHorizontal="true"
             android:text="Add to Order"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:theme="@style/materialButton"
             android:id="@+id/add_to_order_button"
             android:layout_marginTop="16dp"/>
 

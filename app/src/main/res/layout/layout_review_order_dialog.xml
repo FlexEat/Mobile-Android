@@ -9,11 +9,14 @@
         android:id="@+id/review_order_list"/>
 
     <Button
+        android:theme="@style/materialButton"
+        android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/review_order_list"
         android:id="@+id/submit_order_button"
         android:text="Submit Order"
+        android:layout_margin="8dp"
         android:padding="16dp"
         />
 

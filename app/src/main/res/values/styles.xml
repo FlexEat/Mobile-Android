@@ -29,4 +29,9 @@
         <item name="android:background">@drawable/com_facebook_button_login_background</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
+
+    <style name="materialButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorAccent</item>
+    </style>
+
 </resources>

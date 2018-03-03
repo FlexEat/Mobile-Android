@@ -236,7 +236,8 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
             reviewOrderDialog.setContentView(R.layout.layout_review_order_dialog);
             ListView listForReviewOrder = (ListView) reviewOrderDialog.findViewById(R.id.review_order_list);
             Button submitOrder = (Button) reviewOrderDialog.findViewById(R.id.submit_order_button);
-            MenuItemArrayAdapter reviewOrder = new MenuItemArrayAdapter(getApplicationContext(), R.layout.item_menu, listOfSelectedItems);
+            submitOrder.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            MenuItemArrayAdapter reviewOrder = new MenuItemArrayAdapter(getApplicationContext(), R.layout.item_menu, listOfSelectedItems, MenuItemArrayAdapter.SHOW_QUANTITY);
             listForReviewOrder.setAdapter(reviewOrder);
             submitOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -271,7 +272,7 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
                 if (success)
                     Toast.makeText(getApplicationContext(), "Order Submitted", Toast.LENGTH_SHORT).show();
                 for(int i = 0; i < adapter.getCount(); i++){
-                    GenericMenuFragment currentFragment = (GenericMenuFragment)adapter.getItem(i);
+                    GenericMenuFragment currentFragment = (GenericMenuFragment)adapter.getFragment(i);
                     currentFragment.mapOfSelectedItems.clear();
                 }
                 reviewOrderDialog.cancel();
@@ -288,7 +289,7 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     public void getSelectedItems() {
         HashMap<Integer, FoodMenuItem> mapOfAllSelectedItems = new HashMap<>();
         for(int i = 0; i < adapter.getCount(); i++){
-            GenericMenuFragment currentFragment = (GenericMenuFragment) adapter.getItem(i);
+            GenericMenuFragment currentFragment = (GenericMenuFragment) adapter.getFragment(i);
             try{
                 mapOfAllSelectedItems.putAll(currentFragment.mapOfSelectedItems);
             }

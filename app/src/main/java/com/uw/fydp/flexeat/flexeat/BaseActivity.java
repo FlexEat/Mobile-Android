@@ -149,11 +149,15 @@ public class BaseActivity extends AppCompatActivity
                 Intent goToProfileActivity = new Intent(BaseActivity.this, ProfileSetupActivity.class);
                 startActivity(goToProfileActivity);
                 break;
+            case R.id.partnered_restaurants:
+                Intent gotoRestaurantsActivity = new Intent(BaseActivity.this, RestaurantsActivity.class);
+                startActivity(gotoRestaurantsActivity);
             case R.id.logout_menu:
                 AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
                 builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
                 break;
+
         }
 
         // Close the navigation drawer

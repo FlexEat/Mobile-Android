@@ -26,7 +26,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     JSONObject menuResponse;
 
-    HashMap<Integer, Fragment> allFragments = new HashMap<>();
+    private HashMap<Integer, Fragment> allFragments = new HashMap<>();
 
     public PagerAdapter(FragmentManager fm, int numOfTabs, JSONObject menuResponse) {
         super(fm);
@@ -48,6 +48,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         return null;
     }
 
+    public int getInitiatedFragmentCount(){
+        return allFragments.size();
+    }
     public Fragment getFragment(int position){
         return allFragments.get(position);
     }

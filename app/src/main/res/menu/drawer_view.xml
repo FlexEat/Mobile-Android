@@ -8,6 +8,9 @@
             android:id="@+id/edit_profile_menu"
             android:title="Edit Profile" />
         <item
+            android:id="@+id/partnered_restaurants"
+            android:title="Partnered Restaurants" />
+        <item
             android:id="@+id/logout_menu"
             android:title="Logout" />
     </group>

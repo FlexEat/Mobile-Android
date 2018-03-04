@@ -33,6 +33,7 @@ public class OrdersActivity extends AppCompatActivity {
     LinearLayout buttonsLayout;
     TextView orderListEmptyTextView;
     Button payViaAppButton;
+    Button payViaServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,37 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onError(boolean success, int code, Exception e) {
                 e.printStackTrace();
+            }
+        });
+
+        payViaServer = (Button) findViewById(R.id.waiter_pay_button);
+
+        payViaServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String endpoint = "/api/help";
+                JSONObject helpObject = new JSONObject();
+                try{
+                    helpObject.put("restaurant_id", restaurantID);
+                    helpObject.put("table_number", tableNumber);
+                    helpObject.put("is_ready_to_pay", true);
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
+                Request.post(getApplicationContext(), endpoint, helpObject, new Request.Callback() {
+                    @Override
+                    public void onRespond(boolean success, int code, String res, boolean isRemoteResponse) {
+                        Toast.makeText(getApplicationContext(), "Server is bringing the machine", Toast.LENGTH_LONG).show();
+                        Intent gotoRating = new Intent(OrdersActivity.this, RatingActivity.class);
+                        gotoRating.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(gotoRating);
+                    }
+
+                    @Override
+                    public void onError(boolean success, int code, Exception e) {
+                        Toast.makeText(getApplicationContext(), "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 

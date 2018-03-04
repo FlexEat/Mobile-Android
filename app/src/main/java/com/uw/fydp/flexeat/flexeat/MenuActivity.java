@@ -271,7 +271,7 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
             public void onRespond(boolean success, int code, String res, boolean isRemoteResponse) {
                 if (success)
                     Toast.makeText(getApplicationContext(), "Order Submitted", Toast.LENGTH_SHORT).show();
-                for(int i = 0; i < adapter.getCount(); i++){
+                for(int i = 0; i < adapter.getInitiatedFragmentCount(); i++){
                     GenericMenuFragment currentFragment = (GenericMenuFragment)adapter.getFragment(i);
                     currentFragment.mapOfSelectedItems.clear();
                 }
@@ -288,7 +288,7 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     @Override
     public void getSelectedItems() {
         HashMap<Integer, FoodMenuItem> mapOfAllSelectedItems = new HashMap<>();
-        for(int i = 0; i < adapter.getCount(); i++){
+        for(int i = 0; i < adapter.getInitiatedFragmentCount(); i++){
             GenericMenuFragment currentFragment = (GenericMenuFragment) adapter.getFragment(i);
             try{
                 mapOfAllSelectedItems.putAll(currentFragment.mapOfSelectedItems);

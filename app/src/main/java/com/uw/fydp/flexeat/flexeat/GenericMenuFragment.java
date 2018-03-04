@@ -111,7 +111,9 @@ public class GenericMenuFragment extends Fragment {
                 addToOrderButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mapOfSelectedItems.put(arrayListOfItems.get(i).foodItemID, arrayListOfItems.get(i));
+                        if(arrayListOfItems.get(i).quantity > 0) {
+                            mapOfSelectedItems.put(arrayListOfItems.get(i).foodItemID, arrayListOfItems.get(i));
+                        }
                         dialog.cancel();
                     }
                 });

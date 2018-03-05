@@ -10,4 +10,12 @@
         android:layout_marginBottom="60dp"
         android:id="@+id/generic_menu_list" />
 
+    <ProgressBar
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:id="@+id/loading_spinner"
+        android:visibility="invisible"/>
+
 </FrameLayout>

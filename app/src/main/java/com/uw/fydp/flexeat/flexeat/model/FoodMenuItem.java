@@ -18,10 +18,14 @@ public class FoodMenuItem {
     public String imageURL;
     public boolean isShownInMenu;
     public String status;
-
-    public FoodMenuItem(String name, boolean isChecked){
-        this.name = name;
-    }
+    public int orderID;
+    public boolean isGlutenFree;
+    public boolean containsPeanuts;
+    public boolean containsFish;
+    public boolean containsSoy;
+    public boolean isHalal;
+    public boolean isVegetarian;
+    public boolean isVegan;
 
     public FoodMenuItem(JSONObject obj){
         this.name = obj.optString("item_name", "");
@@ -33,10 +37,23 @@ public class FoodMenuItem {
         this.imageURL = obj.optString("image_url", "");
         this.isShownInMenu = obj.optBoolean("is_shown_in_menu", true);
         this.status = obj.optString("status", "");
+        this.isGlutenFree = obj.optBoolean("isglutenfree", false);
+        this.containsPeanuts = obj.optBoolean("containspeanuts", false);
+        this.containsFish = obj.optBoolean("containsfish", false);
+        this.containsSoy = obj.optBoolean("containssoy", false);
+        this.isHalal = obj.optBoolean("ishalal", false);
+        this.isVegan = obj.optBoolean("isvegan", false);
+        this.isVegetarian = obj.optBoolean("isvegatarian", false);
     }
 
-    public void setCheck(boolean check){
-        this.quantity = 0;
+    public FoodMenuItem(JSONObject obj, boolean isOrdered){
+        this.name = obj.optString("item_name", "");
+        this.foodItemID = obj.optInt("item_id", -1);
+        this.restaurantID = obj.optInt("restaurant_id", -1);
+        this.price = obj.optString("price", "");
+        this.status = obj.optString("status", "");
+        this.orderID = obj.optInt("order_id", -1);
+        this.quantity = obj.optInt("item_quantity", -1);
     }
 
     public JSONObject getJSONObject(){
@@ -58,4 +75,21 @@ public class FoodMenuItem {
         }
         return obj;
     }
+
+    public JSONObject getOrderedJSONObject(){
+        JSONObject obj = new JSONObject();
+        try{
+            obj.put("item_name", this.name);
+            obj.put("item_quantity", this.quantity);
+            obj.put("item_id", this.foodItemID);
+            obj.put("restaurant_id", this.restaurantID);
+            obj.put("status", this.status);
+            obj.put("order_id", this.orderID);
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
 }

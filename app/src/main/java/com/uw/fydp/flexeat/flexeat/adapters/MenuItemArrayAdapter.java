@@ -82,7 +82,7 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
             if(this.displayType == SHOW_STATUS){
                 mViewHolder.itemPrice.setText(data.status);
             } else if (this.displayType == SHOW_PRICE){
-                mViewHolder.itemPrice.setText("$" + data.price);
+                mViewHolder.itemPrice.setText("$".concat(data.price));
             } else if (this.displayType == SHOW_QUANTITY){
                 mViewHolder.itemPrice.setText(Integer.toString(data.quantity));
             }

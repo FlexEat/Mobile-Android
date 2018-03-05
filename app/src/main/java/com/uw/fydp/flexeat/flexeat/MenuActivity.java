@@ -43,10 +43,6 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     ArrayList<FoodMenuItem> listOfDrinks = new ArrayList<>();
     ArrayList<FoodMenuItem> listOfDesserts = new ArrayList<>();
 
-    String[] appetizerNames = {"Spring Rolls", "Samosas", "Chicken Wings", "Nachos", "Garlic Bread", "Chicken Lollipop"};
-    String[] mainCourseNames = {"Butter Chicken", "Chili Chicken", "Achari Chicken", "Keema Matar", "Matar Mashroom", "Bindi Masala", "Chana Masala"};
-    String[] drinksNames = {"Slippery Nipple", "Rum and coke", "Glenlevit", "Sex on the Beach", "Screwdriver", "Pepsi", "7up", "Barbican", "Lassi"};
-    String[] dessertsNames = {"Gulab Jamun", "Ras Malai", "Gajar ka Halwa", "kheer", "Rasgulla", "Kulfi", "Jalebi"};
     int tableNumber;
     int restaurantID;
     String restaurantName;
@@ -128,62 +124,34 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
         JSONArray drinksJSONArray = new JSONArray();
         JSONArray dessertsJSONArray = new JSONArray();
 
-        // uncomment the next line to use the mock menu data
-        //menuFromAPI = null;
+        JSONArray fullMenu;
 
-        if (menuFromAPI == null) {
-            // default menu
-            for (int i = 0; i < appetizerNames.length; i++) {
-                listOfAppetizer.add(new FoodMenuItem(appetizerNames[i], false));
-                appetizerJSONArray.put(listOfAppetizer.get(i).getJSONObject());
-            }
-
-            for (int i = 0; i < mainCourseNames.length; i++) {
-                listOfMainCourse.add(new FoodMenuItem(mainCourseNames[i], false));
-                mainCourseJSONArray.put(listOfMainCourse.get(i).getJSONObject());
-            }
-
-            for (int i = 0; i < drinksNames.length; i++) {
-                listOfDrinks.add(new FoodMenuItem(drinksNames[i], false));
-                drinksJSONArray.put(listOfDrinks.get(i).getJSONObject());
-            }
-
-            for (int i = 0; i < dessertsNames.length; i++) {
-                listOfDesserts.add(new FoodMenuItem(dessertsNames[i], false));
-                dessertsJSONArray.put(listOfDesserts.get(i).getJSONObject());
-            }
-
-        } else{
-            // menu came from API
-            JSONArray fullMenu;
-
-            try{
-                fullMenu = new JSONArray(menuFromAPI);
-                for (int i = 0; i < fullMenu.length(); i++){
-                    FoodMenuItem currentItem = new FoodMenuItem(fullMenu.getJSONObject(i));
-                    switch (currentItem.category) {
-                        case "Appetizer":
-                            listOfAppetizer.add(currentItem);
-                            appetizerJSONArray.put(fullMenu.getJSONObject(i));
-                            break;
-                        case "Main Course":
-                            listOfMainCourse.add(currentItem);
-                            mainCourseJSONArray.put(fullMenu.getJSONObject(i));
-                            break;
-                        case "Drinks":
-                            listOfDrinks.add(currentItem);
-                            drinksJSONArray.put(fullMenu.getJSONObject(i));
-                            break;
-                        case "Desserts":
-                            listOfDesserts.add(currentItem);
-                            dessertsJSONArray.put(fullMenu.getJSONObject(i));
-                            break;
-                    }
+        try{
+            fullMenu = new JSONArray(menuFromAPI);
+            for (int i = 0; i < fullMenu.length(); i++){
+                FoodMenuItem currentItem = new FoodMenuItem(fullMenu.getJSONObject(i));
+                switch (currentItem.category) {
+                    case "Appetizer":
+                        listOfAppetizer.add(currentItem);
+                        appetizerJSONArray.put(fullMenu.getJSONObject(i));
+                        break;
+                    case "Main Course":
+                        listOfMainCourse.add(currentItem);
+                        mainCourseJSONArray.put(fullMenu.getJSONObject(i));
+                        break;
+                    case "Drinks":
+                        listOfDrinks.add(currentItem);
+                        drinksJSONArray.put(fullMenu.getJSONObject(i));
+                        break;
+                    case "Desserts":
+                        listOfDesserts.add(currentItem);
+                        dessertsJSONArray.put(fullMenu.getJSONObject(i));
+                        break;
                 }
-
-            } catch (JSONException e){
-                e.printStackTrace();
             }
+
+        } catch (JSONException e){
+            e.printStackTrace();
         }
 
         try{

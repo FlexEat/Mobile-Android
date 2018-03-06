@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -134,7 +135,8 @@ public class GenericMenuFragment extends Fragment {
 
                 name.setText(currentItem.name);
                 description.setText(currentItem.description);
-                price.setText("$".concat(currentItem.price));
+                DecimalFormat df = new DecimalFormat("0.00");
+                price.setText("$".concat(df.format(currentItem.price)));
 
                 Button addToOrderButton = (Button)dialog.findViewById(R.id.add_to_order_button);
                 addToOrderButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -157,10 +159,13 @@ public class GenericMenuFragment extends Fragment {
                     // hide loading spinner
                     loadingSpinner.setVisibility(View.GONE);
                     // fb has returned and we have current user's restrictions
+                    hasFoodRestrictions = false;
                     isAnyFoodRestrictionMet(currentItem);
                     if(hasFoodRestrictions) {
                         foodRestrictionContainer.setVisibility(View.VISIBLE);
                         foodRestrictionReason.setText(setFoodRestrictionReasonString());
+                    } else{
+                        foodRestrictionContainer.setVisibility(View.GONE);
                     }
                 }
 

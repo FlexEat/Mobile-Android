@@ -152,6 +152,7 @@ public class BaseActivity extends AppCompatActivity
             case R.id.partnered_restaurants:
                 Intent gotoRestaurantsActivity = new Intent(BaseActivity.this, RestaurantsActivity.class);
                 startActivity(gotoRestaurantsActivity);
+                break;
             case R.id.logout_menu:
                 AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
                 builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)

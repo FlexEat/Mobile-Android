@@ -14,7 +14,7 @@ public class FoodMenuItem {
     public String category;
     public int quantity = 0;
     public String description;
-    public String price;
+    public double price;
     public String imageURL;
     public boolean isShownInMenu;
     public String status;
@@ -33,7 +33,7 @@ public class FoodMenuItem {
         this.restaurantID = obj.optInt("restaurant_id", -1);
         this.category = obj.optString("category", "");
         this.description = obj.optString("description", "");
-        this.price = obj.optString("price", "");
+        this.price = obj.optDouble("price", 0);
         this.imageURL = obj.optString("image_url", "");
         this.isShownInMenu = obj.optBoolean("is_shown_in_menu", true);
         this.status = obj.optString("status", "");
@@ -50,7 +50,7 @@ public class FoodMenuItem {
         this.name = obj.optString("item_name", "");
         this.foodItemID = obj.optInt("item_id", -1);
         this.restaurantID = obj.optInt("restaurant_id", -1);
-        this.price = obj.optString("price", "");
+        this.price = obj.optDouble("price_per_unit", 0);
         this.status = obj.optString("status", "");
         this.orderID = obj.optInt("order_id", -1);
         this.quantity = obj.optInt("item_quantity", -1);

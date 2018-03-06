@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.uw.fydp.flexeat.flexeat.model.FoodMenuItem;
 import com.uw.fydp.flexeat.flexeat.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -82,7 +83,8 @@ public class MenuItemArrayAdapter extends CustomArrayAdapter<FoodMenuItem> {
             if(this.displayType == SHOW_STATUS){
                 mViewHolder.itemPrice.setText(data.status);
             } else if (this.displayType == SHOW_PRICE){
-                mViewHolder.itemPrice.setText("$".concat(data.price));
+                DecimalFormat df = new DecimalFormat("0.00");
+                mViewHolder.itemPrice.setText("$".concat(df.format(data.price)));
             } else if (this.displayType == SHOW_QUANTITY){
                 mViewHolder.itemPrice.setText(Integer.toString(data.quantity));
             }

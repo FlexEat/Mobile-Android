@@ -11,22 +11,11 @@ public class Restaurant {
 
     public String name;
     public int id;
-
+    public double rating;
 
     public Restaurant(JSONObject response){
-        this.name = response.optString("restaurant_name");
-        this.id = response.optInt("restaurant_id");
+        this.name = response.optString("restaurant_name", "");
+        this.id = response.optInt("restaurant_id", -1);
+        this.rating = response.optDouble("rating", 5.0);
     }
-
-    public JSONObject getJSONObject(){
-        JSONObject obj = new JSONObject();
-        try{
-            obj.put("restaurant_name", this.name);
-            obj.put("restaurant_id", this.id);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        return obj;
-    }
-
 }

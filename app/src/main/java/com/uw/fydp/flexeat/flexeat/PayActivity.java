@@ -8,6 +8,8 @@ import android.widget.Button;
 
 public class PayActivity extends AppCompatActivity {
 
+    int restaurantID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,10 +17,13 @@ public class PayActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Payment");
         Button submitPaymentButton = (Button)findViewById(R.id.submit_payment_button);
 
+        restaurantID = getIntent().getIntExtra("restaurantID", -1);
+
         submitPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent gotoRating = new Intent(PayActivity.this, RatingActivity.class);
+                gotoRating.putExtra("restaurantID", restaurantID);
                 gotoRating.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(gotoRating);
             }

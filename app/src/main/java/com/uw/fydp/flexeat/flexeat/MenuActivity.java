@@ -53,7 +53,6 @@ public class MenuActivity extends AppCompatActivity implements MenuItemInterface
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        //String menuFromAPI = null;
         String menuFromAPI = getIntent().getStringExtra("menuAsString");
         restaurantName = getIntent().getStringExtra("restaurantName");
         tableNumber = getIntent().getIntExtra("tableNumber", -1);

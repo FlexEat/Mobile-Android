@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class OrdersActivity extends AppCompatActivity {
@@ -36,6 +37,8 @@ public class OrdersActivity extends AppCompatActivity {
     TextView orderListEmptyTextView;
     Button payViaAppButton;
     Button payViaServer;
+    LinearLayout totalCostContainer;
+    TextView totalCostValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class OrdersActivity extends AppCompatActivity {
         buttonsLayout = (LinearLayout) findViewById(R.id.buttons_layout);
 
         orderListEmptyTextView = (TextView) findViewById(R.id.order_list_empty_text_view);
+        totalCostValue = (TextView) findViewById(R.id.total_cost_value);
+        totalCostContainer = (LinearLayout) findViewById(R.id.total_cost_container);
 
         restaurantID = getIntent().getIntExtra("restaurant_id", -1);
         tableNumber = getIntent().getIntExtra("table_number", -1);
@@ -73,11 +78,14 @@ public class OrdersActivity extends AppCompatActivity {
                         if (response.length() != 0){
                             orderList.setVisibility(View.VISIBLE);
                             buttonsLayout.setVisibility(View.VISIBLE);
+                            totalCostContainer.setVisibility(View.VISIBLE);
                             for(int i = 0; i < response.length(); i++){
                                 arrayOfOrderItems.add(new FoodMenuItem(response.getJSONObject(i), true));
                                 adapter.notifyDataSetChanged();
                             }
                             orderList.setOnItemClickListener(onOrderItemClickListener);
+                            DecimalFormat df = new DecimalFormat("0.00");
+                            totalCostValue.setText("$".concat(df.format(calculateTotalCost())));
                         } else {
                             orderListEmptyTextView.setVisibility(View.VISIBLE);
                         }
@@ -112,6 +120,7 @@ public class OrdersActivity extends AppCompatActivity {
                     public void onRespond(boolean success, int code, String res, boolean isRemoteResponse) {
                         Toast.makeText(getApplicationContext(), "Server is bringing the machine", Toast.LENGTH_LONG).show();
                         Intent gotoRating = new Intent(OrdersActivity.this, RatingActivity.class);
+                        gotoRating.putExtra("restaurantID", restaurantID);
                         gotoRating.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(gotoRating);
                     }
@@ -130,6 +139,7 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent gotoPaymentScreen = new Intent(OrdersActivity.this, PayActivity.class);
+                gotoPaymentScreen.putExtra("restaurantID", restaurantID);
                 startActivity(gotoPaymentScreen);
             }
         });
@@ -195,13 +205,17 @@ public class OrdersActivity extends AppCompatActivity {
                             for(int i = 0; i < response.length(); i++){
                                 orderList.setVisibility(View.VISIBLE);
                                 buttonsLayout.setVisibility(View.VISIBLE);
+                                totalCostContainer.setVisibility(View.VISIBLE);
                                 orderListEmptyTextView.setVisibility(View.INVISIBLE);
                                 arrayOfOrderItems.add(new FoodMenuItem(response.getJSONObject(i), true));
                                 adapter.notifyDataSetChanged();
+                                DecimalFormat df = new DecimalFormat("0.00");
+                                totalCostValue.setText("$".concat(df.format(calculateTotalCost())));
                             }
                         } else {
                             orderList.setVisibility(View.INVISIBLE);
                             buttonsLayout.setVisibility(View.INVISIBLE);
+                            totalCostContainer.setVisibility(View.INVISIBLE);
                             orderListEmptyTextView.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e){
@@ -235,5 +249,17 @@ public class OrdersActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public double calculateTotalCost(){
+        double totalCost = 0.0;
+        for(int i = 0; i < arrayOfOrderItems.size(); i++){
+            if(arrayOfOrderItems.get(i).status.equals("finished")) {
+                double cost = arrayOfOrderItems.get(i).price * arrayOfOrderItems.get(i).quantity;
+                totalCost += cost;
+            }
+        }
+
+        return totalCost;
     }
 }
